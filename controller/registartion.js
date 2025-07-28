@@ -4,8 +4,8 @@ var bcrypt =require("bcrypt");
 
 module.exports.Register = async (req, res) => {
     try {
-        var { name, email, password, mobile, address, state,district,pincode } = req.body
-        if (!name || !email || !password || !mobile || !address || !state||!district||!pincode) {
+        var { name, email, password, mobile } = req.body
+        if (!name || !email || !password || !mobile  ) {
             return res.send({
                 result: false,
                 message: "insufficent parmeter"
@@ -23,7 +23,7 @@ module.exports.Register = async (req, res) => {
 
         } else {
             var hashedpasssword = await bcrypt.hash(password, 10)
-            let adduser = await model.AddUser(name, email,hashedpasssword, mobile,address,state,district,pincode, date);
+            let adduser = await model.AddUser(name, email,hashedpasssword, mobile, date);
 
             if (adduser.affectedRows) {
                 return res.send({
@@ -40,18 +40,6 @@ module.exports.Register = async (req, res) => {
 
             }
         }
-        // if (adduser.affectedRows) {
-        //     return res.send({
-        //         result: true,
-        //         message: "registerd sucessfully"
-        //     })
-
-        // } else {
-        //     return res.send({
-        //         result: false,
-        //         message: "failed to registerd "
-        //     })
-        // }
     } catch (error) {
         console.log(error);
 

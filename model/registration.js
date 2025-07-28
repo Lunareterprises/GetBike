@@ -8,9 +8,9 @@ module.exports.CheckMail = async (email) => {
     return data;
 }
 
-module.exports.AddUser= async (name, email,hashedpasssword, mobile,address,state,district,pincode, date) => {
-    var Query = `insert into user(u_name,u_email,u_password,u_mobile,u_address,u_state,u_district,u_pincode,u_joindate)values(?,?,?,?,?,?,?,?,?)`;
-    var data = await query(Query, [name, email,hashedpasssword, mobile,address,state,district,pincode, date])
+module.exports.AddUser= async (name, email,hashedpasssword, mobile, date) => {
+    var Query = `insert into user(u_name,u_email,u_password,u_mobile,u_joindate)values(?,?,?,?,?)`;
+    var data = await query(Query, [name, email,hashedpasssword, mobile, date])
     return data;
 }
 
