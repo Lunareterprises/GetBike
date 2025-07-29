@@ -32,11 +32,5 @@ route.post('/delete/bike',deleteBikes)
 var{editbikes}=require('./controller/addbike')
 route.post('/edit/bike',editbikes)
 
-// var{addmostratedscooties}=require('./controller/most_rated_scooties')
-// route.post('/add/mostratedscooties',addmostratedscooties)
 
-// var{listmostratedscooties}=require('./controller/most_rated_scooties')
-// route.post('/list/mostratedscooties',listmostratedscooties)
-
-
-module.exports = route
+ module.exports = route

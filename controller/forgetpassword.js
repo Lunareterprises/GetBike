@@ -234,8 +234,10 @@ console.log(req.body);
             });
         }
         var hashedpassword = await bcrypt.hash(password, 10)
+
         let ChangePassword = await model.updatepassword(hashedpassword, email);
-        if (ChangePassword.affectedRows) {
+
+        if (ChangePassword.affectedRows>0) {
             let transporter = nodemailer.createTransport({
                 host: "smtp.hostinger.com",
                 port: 587,

@@ -1,11 +1,11 @@
 var model = require('../model/registration');
 var moment = require("moment");
-var bcrypt =require("bcrypt");
+var bcrypt = require("bcrypt");
 
 module.exports.Register = async (req, res) => {
     try {
         var { name, email, password, mobile } = req.body
-        if (!name || !email || !password || !mobile  ) {
+        if (!name || !email || !password || !mobile) {
             return res.send({
                 result: false,
                 message: "insufficent parmeter"
@@ -21,25 +21,25 @@ module.exports.Register = async (req, res) => {
                 message: "email already registerd"
             });
 
-        } else {
-            var hashedpasssword = await bcrypt.hash(password, 10)
-            let adduser = await model.AddUser(name, email,hashedpasssword, mobile, date);
-
-            if (adduser.affectedRows) {
-                return res.send({
-                    result: true,
-                    message: "registerd sucessfully"
-                })
-            } else {
-                return res.send({
-                    result: false,
-                    message: "error in adding user details"
-
-
-                })
-
-            }
         }
+        var hashedpasssword = await bcrypt.hash(password, 10)
+        let adduser = await model.AddUser(name, email, hashedpasssword, mobile, date);
+
+        if (adduser.affectedRows > 0) {
+            return res.send({
+                result: true,
+                message: "registerd sucessfully"
+            })
+        } else {
+            return res.send({
+                result: false,
+                message: "error in adding user details"
+
+
+            })
+
+        }
+
     } catch (error) {
         console.log(error);
 
