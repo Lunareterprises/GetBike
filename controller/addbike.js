@@ -29,12 +29,12 @@ module.exports.addbike = async (req, res) => {
             if (files.image) {
                 var oldpath = files.image.filepath;
                 var newpath =
-                    process.cwd() + "/uploads/addbike/" +
+                    process.cwd() + "/uploads/bike/" +
                     files.image.orginalfilename;
                 let rawData = fs.readFileSync(oldpath);
                 fs.writeFile(newpath, rawData, async function (err) {
                     if (err) console.log(err);
-                    let imagepath = "/uploads/addbike/" + files.image.originalFilename;
+                    let imagepath = "/uploads/bike/" + files.image.originalFilename;
                     console.log(name, ratings, review, description, rate);
 
                     let addbike = await model.addbikeaddQuery(name, ratings, review, description, rate, imagepath);
@@ -179,12 +179,12 @@ module.exports.editbikes = async (req, res) => {
       if (files.image) {
         const oldPath = files.image.filepath;
         const fileName = files.image.originalFilename;
-        const newPath = path.join(process.cwd(), '/uploads/addbike/', fileName);
+        const newPath = path.join(process.cwd(), '/uploads/bike/', fileName);
 
         const rawData = fs.readFileSync(oldPath);
         fs.writeFileSync(newPath, rawData);
 
-        const imagePath = `/uploads/addbike/${fileName}`;
+        const imagePath = `/uploads/bike/${fileName}`;
         const imageUpdate = await model.UpdateBikesImage(imagePath, b_id);
 
         if (!imageUpdate.affectedRows) {

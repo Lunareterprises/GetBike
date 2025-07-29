@@ -33,4 +33,8 @@ var{editbikes}=require('./controller/addbike')
 route.post('/edit/bike',editbikes)
 
 
+var{bookings}=require('./controller/booking')
+route.post('/add/booking',bookings)
+
+
  module.exports = route
