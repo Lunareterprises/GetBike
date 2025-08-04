@@ -13,6 +13,7 @@ module.exports.Register = async (req, res) => {
         }
         var date = moment().format('YYYY-MM-DD')
         let checkmail = await model.CheckMail(email);
+        let checkmobile=await model.checkmobile(mobile);
 
         if (checkmail.length > 0) {
 
@@ -22,13 +23,21 @@ module.exports.Register = async (req, res) => {
             });
 
         }
+        if(checkmobile.length >0){
+             return res.send({
+                result: false,
+                message: "phone number already registerd"
+            });
+
+
+        }
         var hashedpasssword = await bcrypt.hash(password, 10)
         let adduser = await model.AddUser(name, email, hashedpasssword, mobile, date);
 
         if (adduser.affectedRows > 0) {
             return res.send({
                 result: true,
-                message: "registerd sucessfully"
+                message: "registerd successfully"
             })
         } else {
             return res.send({

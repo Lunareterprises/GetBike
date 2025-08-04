@@ -37,4 +37,25 @@ var{bookings}=require('./controller/booking')
 route.post('/add/booking',bookings)
 
 
+
+var{EditPersonalInfo }=require('./controller/editprofile')
+route.post('/edit/profile',EditPersonalInfo )
+
+
+var{ContactUs }=require('./controller/contact')
+route.post('/add/contact',ContactUs )
+
+var{listcontact}=require('./controller/contact')
+route.post('/list/contact',listcontact)
+
+var{deletecontact}=require('./controller/contact')
+route.post('/delete/contact',deletecontact)
+
+var{documents}=require('./controller/documents')
+route.post('/add/document',documents)
+
+
+
+
+
  module.exports = route

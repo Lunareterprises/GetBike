@@ -1,16 +1,17 @@
 var db=require('../config/db');
 var util=require("util");
+
 const query =util.promisify(db.query).bind(db);
 
 module.exports.SelectImage=async()=>{
     var Query=`select  * from bikes;`
-    var data=query(Query);
+    var data= await query(Query);
     return data;
 
 }
-module.exports.addbikeaddQuery=async(name,ratings,review,description,rate,imagepath)=>{
-    var Query=`insert into bikes(b_name,b_ratings,b_reviews,b_description,b_price,b_image) values(?,?,?,?,?,?);`
-    var data=query(Query,[name,ratings,review,description,rate,imagepath]);
+module.exports.AddImagesQuery=async(name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,imagePath)=>{
+    var Query=`insert into bikes(b_name,b_ratings,b_reviews,b_description,b_price,b_location,b_extras,b_milage,b_geartype,b_fueltype,b_bhp,b_image) values(?,?,?,?,?,?,?,?,?,?,?,?);`
+    var data=query(Query,[name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,imagePath]);
     return data;
 
 }

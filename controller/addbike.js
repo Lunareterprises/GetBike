@@ -16,70 +16,76 @@ module.exports.addbike = async (req, res) => {
                     data: err,
                 })
             }
-            let { name, ratings, review, description, rate } = fields;
+            let { name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp } = fields;
 
 
-            if (!name || !ratings || !review || !description || !rate) {
+            if (!name || !ratings || !review || !description || !rate||!location||!extras||!milage||!geartype||!fueltype||!bhp) {
                 return res.send({
                     result: false,
                     message: "insufficent parameter",
 
                 })
             }
-            if (files.image) {
-                var oldpath = files.image.filepath;
-                var newpath =
-                    process.cwd() + "/uploads/bike/" +
-                    files.image.orginalfilename;
-                let rawData = fs.readFileSync(oldpath);
-                fs.writeFile(newpath, rawData, async function (err) {
-                    if (err) console.log(err);
-                    let imagepath = "/uploads/bike/" + files.image.originalFilename;
-                    console.log(name, ratings, review, description, rate);
+            
 
-                    let addbike = await model.addbikeaddQuery(name, ratings, review, description, rate, imagepath);
-                    if (addbike.affectedRows > 0) {
-                        return res.send({
-                            result: true,
-                            message: "   bike details added successfully",
+            
+           if(files &&files.image){
+               // Normalize to array: handles both single and multiple image uploads
+            const imageFiles =Array.isArray(files.image)?files.image :[files.image];
 
-                        })
-                    } else {
-                        return res.send({
-                            result: true,
-                            message: "failed to added bike details"
+            for (const file of imageFiles) {
+                    if (!file || !file.filepath || !file.originalFilename) continue;
 
-                        })
+                    const oldPath = file.filepath;
+                    const newPath = path.join(process.cwd(), '/uploads/bikes', file.originalFilename);
 
-                    }
-                })
+                    const rawData = fs.readFileSync(oldPath);
+                    fs.writeFileSync(newPath, rawData);
 
+                    const imagePath = "/uploads/bikes/" + file.originalFilename;
 
-            } else {
-                return res.send({
+                    var insertResult = await model.AddImagesQuery( name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,imagePath);
+                    // console.log(insertResult, "image insert result");
+                }
+                 
+           if (insertResult.affectedRows > 0) {
+
+                return res.status(200).json({
                     result: true,
-                    message: "image required"
-
-                })
-
+                    message: 'bike added successfully',
+                });
+            } else {
+                return res.status(500).json({
+                    result: false,
+                    message: 'Failed to add bike deatils',
+                });
             }
+           }
+           
 
-        })
-    } catch (error) {
-        console.log(error);
-        return res.send({
+          
+    } )
+
+}catch (error) {
+        console.error(error);
+        return res.status(500).json({
             result: false,
-            message: error.message,
-
+            message: 'Internal server error.',
+            data: error.message,
         });
     }
 }
+
+
 module.exports.listbike = async (req, res) => {
     try {
-        let { b_id } = req.body || {}
+        let { b_id ,search} = req.body || {}
         var condition = ''
         if (b_id) {
             condition = `where b_id='${b_id}'`
+        }
+        if(search){
+            condition=`where (b_name LIKE '%${search}%')`;
         }
         let listbike = await model.listbikeQuery(condition);
 
@@ -147,7 +153,7 @@ module.exports.editbikes = async (req, res) => {
                     data: err,
                 });
             }
-            const { b_id, name, ratings, review, description, rate } = fields;
+            const { b_id, name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp } = fields;
 
             if (!b_id) {
                 return res.send({
@@ -164,11 +170,19 @@ module.exports.editbikes = async (req, res) => {
             }
 
             let updates = [];
-            if (name) updates.push(`b_name='${name}'`);
-            if (ratings) updates.push(`b_ratings='${ratings}'`);
-            if (review) updates.push(`b_reviews='${review}'`);
-            if (description) updates.push(`b_description='${description}'`);
-            if (rate) updates.push(`b_price='${rate}'`);
+
+if (name) updates.push(`b_name='${name}'`);
+if (ratings) updates.push(`b_ratings='${ratings}'`);
+if (review) updates.push(`b_reviews='${review}'`);
+if (description) updates.push(`b_description='${description}'`);
+if (rate) updates.push(`b_price='${rate}'`);
+if (location) updates.push(`b_location='${location}'`);
+if (extras) updates.push(`b_extras='${extras}'`);
+if (milage) updates.push(`b_milage='${milage}'`);
+if (geartype) updates.push(`b_geartype='${geartype}'`);
+if (fueltype) updates.push(`b_fueltype='${fueltype}'`);
+if (bhp) updates.push(`b_bhp='${bhp}'`);
+
 
 
             if (updates.length > 0) {
@@ -207,7 +221,7 @@ module.exports.editbikes = async (req, res) => {
     });
   }
 
-};
+}
 
 
 
@@ -219,8 +233,6 @@ module.exports.editbikes = async (req, res) => {
 
 
         
-
-
 
 
 
