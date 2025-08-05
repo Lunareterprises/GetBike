@@ -1,4 +1,6 @@
-var model= require('../model/booking')
+var model= require('../model/booking');
+var util =require('../util/notification');
+var moment=require("moment");
 
 module.exports.bookings=async(req,res)=>{
     try{
@@ -22,16 +24,22 @@ console.log("booking");
 
 
 if(booking.affectedRows >0){
+
+    await notify.createnotification(  user_id,
+                "user",
+                "Booking",
+                "Booking confirmed successfully",
+                "unread");
     return res.send({
         result:true,
-        message:'booking conformed',
+        message:'booking conformed and notification added',
 
     })
 }
 else{
    return res.send({
     result:false,
-    message:"not conformed"
+    message:" booking not conformed"
    }) 
 }
 

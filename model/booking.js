@@ -9,3 +9,8 @@ module.exports.checkbooking =async( user_id, bike_id, pickup_location, pickup_da
    var data=query(Query,[user_id, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time]);
    return data; 
 }
+module.exports.createnotification=async(user_id, role, type, message,status)=>{
+  var Query= `insert into  notifications(user_id,role,type,message,status) values(?,?,?,?,?)`;
+  var data=query(Query,[user_id, role, type, message,status]);
+  return data;
+}

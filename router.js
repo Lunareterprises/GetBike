@@ -54,16 +54,6 @@ route.post('/delete/contact',deletecontact)
 var{documents}=require('./controller/documents')
 route.post('/add/document',documents)
 
-var{getUserNotifications}=require('./controller/notification')
-route.post('/notifications',getUserNotifications)
-
-
-var{markAsRead}=require('./controller/notification')
-route.post('/notifications/read', markAsRead)
-
-var{createNotification}=require('./controller/notification')
-route.post('/notifications/create', createNotification);
-
 
 
  module.exports = route
