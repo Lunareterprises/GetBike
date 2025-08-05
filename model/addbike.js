@@ -20,6 +20,11 @@ module.exports.listbikeQuery =async(condition)=>{
     var data =query(Query);
     return data;
 }
+module.exports.listbikeQuery =async(condition)=>{
+    var Query=`SELECT * FROM bikes ${condition} ${orderby}`;
+    var data=query(Query);
+    return data;
+}
 module.exports.RemoveBikesQuery =async(b_id)=>{
     var Query =`delete from bikes where b_id=?`;
     var data = await query(Query,[b_id]);

@@ -15,19 +15,22 @@ module.exports.documents = async (req, res) => {
 
                 });
             }
-            let {adhar,license}=fields;
-            if (!files.adhar || !files.license) {
+            let{u_id}=fields;
+
+            if(!u_id){
                  return res.send({
                     result: false,
-                    message: "Insufficient parameter",
+                    message: "User ID is required.",
                 });
-            }  if (!files.adhar || !files.license) {
+            }
+            
+            if (!files.adhar || !files.license) {
                 return res.send({
                     result: false,
                     message: "Insufficient parameter"
                 });
             }
-            console.log(adhar,license);
+            console.log(u_id);
 
             // ✅ Handle Aadhar Upload
             if (files.adhar) {
@@ -40,13 +43,13 @@ module.exports.documents = async (req, res) => {
                     fs.writeFileSync(newPath, rawData);
 
                     const adharPath = "uploads/adharcard/" + fileName;
-                    await model.AddadharQuery(adharPath);
+                    await model.AddadharQuery(adharPath,u_id);
                 } catch (error) {
                     console.log( error);
                     return res.send({
                         result: false,
                         message: "Failed to save Aadhar file.",
-                        data: err
+                        data: error
                     });
                 }
             }
@@ -62,22 +65,25 @@ module.exports.documents = async (req, res) => {
                     fs.writeFileSync(newPath, rawData);
 
                     const licensePath = "uploads/licensecard/" + fileName;
-                    await model.AddlicenseQuery(licensePath);
-                } catch (err) {
+                    await model.AddlicenseQuery(licensePath,u_id);
+                } catch (error) {
                     console.log(error);
                     return res.send({
                         result: false,
                         message: "Failed to save License file.",
-                        data: err
+                        data: error
+                       
                     });
                 }
             }
+            
 
             return res.send({
                 result: true,
                 message: "Documents uploaded successfully"
             });
         });
+        
     } catch (error) {
         console.log(error);
         return res.send({

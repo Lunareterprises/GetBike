@@ -79,7 +79,7 @@ module.exports.addbike = async (req, res) => {
 
 module.exports.listbike = async (req, res) => {
     try {
-        let { b_id ,search} = req.body || {}
+        let { b_id ,search,most_rated} = req.body || {}
         var condition = ''
         if (b_id) {
             condition = `where b_id='${b_id}'`
@@ -87,7 +87,10 @@ module.exports.listbike = async (req, res) => {
         if(search){
             condition=`where (b_name LIKE '%${search}%')`;
         }
-        let listbike = await model.listbikeQuery(condition);
+        if(most_rated){
+            orderby=`ORDER BY b_reviews DESC`;
+        }
+        let listbike = await model.listbikeQuery(condition, orderby);
 
         if (listbike.length > 0) {
             return res.send({
