@@ -88,9 +88,9 @@ module.exports.listbike = async (req, res) => {
             condition=`where (b_name LIKE '%${search}%')`;
         }
         if(most_rated){
-            orderby=`ORDER BY b_reviews DESC`;
+            condition=`ORDER BY b_ratings DESC`;
         }
-        let listbike = await model.listbikeQuery(condition, orderby);
+        let listbike = await model.listbikeQuery(condition);
 
         if (listbike.length > 0) {
             return res.send({
