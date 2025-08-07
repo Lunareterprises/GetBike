@@ -16,10 +16,10 @@ module.exports.addbike = async (req, res) => {
                     data: err,
                 })
             }
-            let { name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp } = fields;
+            let { name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed} = fields;
 
 
-            if (!name || !ratings || !review || !description || !rate||!location||!extras||!milage||!geartype||!fueltype||!bhp) {
+            if (!name || !ratings || !review || !description || !rate||!location||!extras||!milage||!geartype||!fueltype||!bhp||!distance||!max_speed) {
                 return res.send({
                     result: false,
                     message: "insufficent parameter",
@@ -44,8 +44,9 @@ module.exports.addbike = async (req, res) => {
 
                     const imagePath = "/uploads/bikes/" + file.originalFilename;
 
-                    var insertResult = await model.AddImagesQuery( name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,imagePath);
+                    var insertResult = await model.AddImagesQuery( name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath);
                     // console.log(insertResult, "image insert result");
+                    console.log("Insert result:", insertResult);
                 }
                  
            if (insertResult.affectedRows > 0) {
@@ -88,7 +89,7 @@ module.exports.listbike = async (req, res) => {
             condition=`where (b_name LIKE '%${search}%')`;
         }
         if(most_rated){
-            condition=`ORDER BY b_ratings DESC`;
+            orderby=`ORDER BY b_ratings DESC`;
         }
         let listbike = await model.listbikeQuery(condition);
 
@@ -156,7 +157,7 @@ module.exports.editbikes = async (req, res) => {
                     data: err,
                 });
             }
-            const { b_id, name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp } = fields;
+            const { b_id, name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp,distance,max_speed } = fields;
 
             if (!b_id) {
                 return res.send({
@@ -185,6 +186,8 @@ if (milage) updates.push(`b_milage='${milage}'`);
 if (geartype) updates.push(`b_geartype='${geartype}'`);
 if (fueltype) updates.push(`b_fueltype='${fueltype}'`);
 if (bhp) updates.push(`b_bhp='${bhp}'`);
+if(distance)updates.push(`distance='${distance}'`);
+if(max_speed)updates.push(`max_speed='${max_speed}'`);
 
 
 
@@ -196,12 +199,12 @@ if (bhp) updates.push(`b_bhp='${bhp}'`);
       if (files.image) {
         const oldPath = files.image.filepath;
         const fileName = files.image.originalFilename;
-        const newPath = path.join(process.cwd(), '/uploads/bike/', fileName);
+        const newPath = path.join(process.cwd(), '/uploads/addbike/', fileName);
 
         const rawData = fs.readFileSync(oldPath);
         fs.writeFileSync(newPath, rawData);
 
-        const imagePath = `/uploads/bike/${fileName}`;
+        const imagePath = `/uploads/addbike/${fileName}`;
         const imageUpdate = await model.UpdateBikesImage(imagePath, b_id);
 
         if (!imageUpdate.affectedRows) {

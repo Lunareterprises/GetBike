@@ -9,9 +9,9 @@ module.exports.SelectImage=async()=>{
     return data;
 
 }
-module.exports.AddImagesQuery=async(name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,imagePath)=>{
-    var Query=`insert into bikes(b_name,b_ratings,b_reviews,b_description,b_price,b_location,b_extras,b_milage,b_geartype,b_fueltype,b_bhp,b_image) values(?,?,?,?,?,?,?,?,?,?,?,?);`
-    var data=query(Query,[name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,imagePath]);
+module.exports.AddImagesQuery=async(name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath)=>{
+    var Query=`insert into bikes(b_name,b_ratings,b_reviews,b_description,b_price,b_location,b_extras,b_milage,b_geartype,b_fueltype,b_bhp,distance,max_speed,b_image) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
+    var data= await query(Query,[name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath]);
     return data;
 
 }

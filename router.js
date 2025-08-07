@@ -36,7 +36,8 @@ route.post('/edit/bike',editbikes)
 var{bookings}=require('./controller/booking')
 route.post('/add/booking',bookings)
 
-
+var{cancelBooking}=require('./controller/cancelbooking')
+route.post('/cancel/booking',cancelBooking)
 
 var{EditPersonalInfo }=require('./controller/editprofile')
 route.post('/edit/profile',EditPersonalInfo )
@@ -53,6 +54,13 @@ route.post('/delete/contact',deletecontact)
 
 var{documents}=require('./controller/documents')
 route.post('/add/document',documents)
+
+
+var{updateBookingStatus}=require('./controller/updatebooking')
+route.post('/update/status',updateBookingStatus)
+
+var{listbooking}=require('./controller/booking')
+route.post('/list/booking',listbooking)
 
 
 
