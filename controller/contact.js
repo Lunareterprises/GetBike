@@ -1,4 +1,4 @@
-const model=require('../model/contact');
+const model = require('../model/contact');
 var nodemailer = require("nodemailer");
 
 module.exports.ContactUs = async (req, res) => {
@@ -14,7 +14,7 @@ module.exports.ContactUs = async (req, res) => {
         message = "no message"
     }
 
-let checkcontact=await model.addcontactQuery(name, email, message,phonenumber,issuetype)
+    let checkcontact = await model.addcontactQuery(name, email, message, phonenumber, issuetype)
 
     let transporter = nodemailer.createTransport({
         host: "smtp.hostinger.com",
@@ -23,7 +23,7 @@ let checkcontact=await model.addcontactQuery(name, email, message,phonenumber,is
             type: 'custom',
             method: 'PLAIN',
             user: 'noreply@drlifeboat.com',
-            pass:'Drlifeboat@noreply123',
+            pass: 'Drlifeboat@noreply123',
         },
     });
 
@@ -96,7 +96,7 @@ let checkcontact=await model.addcontactQuery(name, email, message,phonenumber,is
     },
     {
         email: 'support@kapnastore.com',
-        subject:` New Enquiry From : ${name}`,
+        subject: ` New Enquiry From : ${name}`,
         html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,21 +180,21 @@ let checkcontact=await model.addcontactQuery(name, email, message,phonenumber,is
 };
 module.exports.listcontact = async (req, res) => {
     try {
-        
-        let listcontact = await model.listcontactQuery();
-        if(listcontact.length>0){
-            return res.send({
-                result:true,
-                message:"data retrieved",
-                list:listcontact,
 
-                
+        let listcontact = await model.listcontactQuery();
+        if (listcontact.length > 0) {
+            return res.send({
+                result: true,
+                message: "data retrieved",
+                list: listcontact,
+
+
             });
 
-        }else{
+        } else {
             return res.send({
-                result:false,
-                messsage:"data not found",
+                result: false,
+                messsage: "data not found",
             });
         }
 
@@ -207,47 +207,47 @@ module.exports.listcontact = async (req, res) => {
 
     }
 }
-module.exports.deletecontact =async (req,res)=>{
+module.exports.deletecontact = async (req, res) => {
     try {
-        let c_id =req.body.c_id;
-        if(c_id){
-             let checkcontact = await model.checkcontactQuery(c_id);
-                        if (checkcontact.length == 0) {
-            return res.send({
-                result:false,
-                message:"missing c_id",
-
-            })
-
-            
-        }else{
-            var deletesection =await model.removecontactQuery(c_id);
-            if(deletesection.affectedRows>0)
+        let c_id = req.body.c_id;
+        if (c_id) {
+            let checkcontact = await model.checkcontactQuery(c_id);
+            if (checkcontact.length == 0) {
                 return res.send({
-            result:true,
-            message:"contact deleted successfully"
+                    result: false,
+                    message: "missing c_id",
 
                 })
+
+
+            } else {
+                var deletesection = await model.removecontactQuery(c_id);
+                if (deletesection.affectedRows > 0)
+                    return res.send({
+                        result: true,
+                        message: "contact deleted successfully"
+
+                    })
             }
 
-        }else{
+        } else {
             return res.send({
-                result:false,
-                message:"failed to delete contact",
+                result: false,
+                message: "failed to delete contact",
             })
         }
 
 
-        
+
     } catch (error) {
-        return res .send({
-            result:false,
-            message:error.message,
+        return res.send({
+            result: false,
+            message: error.message,
         });
     }
-    
-            
-            
-    
-    
+
+
+
+
+
 }
