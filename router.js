@@ -63,4 +63,8 @@ var{listbooking}=require('./controller/booking')
 route.post('/list/booking',listbooking)
 
 
- module.exports = route
+var{reviewadd}=require('./controller/review')
+route.post('/add/review',reviewadd)
+
+module.exports = route
+
