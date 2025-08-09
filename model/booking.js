@@ -9,13 +9,19 @@ module.exports.checkbooking =async( user_id, bike_id, pickup_location, pickup_da
    var data=query(Query,[user_id, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time,booking_date,invoice]);
    return data; 
 }
-module.exports.addNotification=async(user_id, role, type, message,status)=>{
-  var Query= `insert into  notifications(user_id,role,type,message,status) values(?,?,?,?,?)`;
-  var data=query(Query,[user_id, role, type, message,status]);
-  return data;
-}
+// module.exports.addNotification=async(user_id, role, type, message,status)=>{
+//   var Query= `insert into  notifications(user_id,role,type,message,status) values(?,?,?,?,?)`;
+//   var data=query(Query,[user_id, role, type, message,status]);
+//   return data;
+// }
 module.exports.listbookingQuery=async(condition)=>{
   var Query=`SELECT * FROM  bookings ${condition}`;
+  var data= await query(Query);
+  return data;
+}
+
+module.exports.GetAdmin=async()=>{
+  var Query=`SELECT * FROM user where u_role='admin'`;
   var data= await query(Query);
   return data;
 }

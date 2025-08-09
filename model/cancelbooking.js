@@ -9,3 +9,9 @@ module.exports.cancelBookingById =async (b_id, b_u_id) => {
     var data=query(Query,[b_id, b_u_id]);
     return data;
 }
+
+module.exports.GetAdmin=async()=>{
+  var Query=`SELECT * FROM user where u_role='admin'`;
+  var data= await query(Query);
+  return data;
+}
