@@ -63,5 +63,4 @@ var{listbooking}=require('./controller/booking')
 route.post('/list/booking',listbooking)
 
 
-
  module.exports = route

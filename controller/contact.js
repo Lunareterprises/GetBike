@@ -1,5 +1,4 @@
 const model=require('../model/contact');
-
 var nodemailer = require("nodemailer");
 
 module.exports.ContactUs = async (req, res) => {
@@ -30,7 +29,7 @@ let checkcontact=await model.addcontactQuery(name, email, message,phonenumber,is
 
     let data = [{
         email: email,
-        subject: "MESSAGE FROM KAPNA STORE",
+        subject: "MESSAGE FROM GETBIKE",
         html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,7 +152,7 @@ let checkcontact=await model.addcontactQuery(name, email, message,phonenumber,is
 
         <div class="footer">
             <p>Thank you for your attention!</p>
-            <p>KAPNA STORE TEAMS</p>
+            <p>GETBIKE TEAMS</p>
         </div>
     </div>
 </body>
