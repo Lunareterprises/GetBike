@@ -14,9 +14,9 @@ module.exports.cancelBooking = async (req, res) => {
         const cancelResult = await model.cancelBookingById(b_id, b_u_id);
 
         if (cancelResult.affectedRows > 0) {
-            // Send notification
-            await notify.addNotification(
-                b_u_id,
+            let getadmin = await model.GetAdmin()
+
+            await notify.addNotification(b_u_id, getadmin[0]?.u_id,
                 "user",
                 "Booking Cancelled",
                 "Your booking has been cancelled successfully.",

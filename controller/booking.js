@@ -25,10 +25,10 @@ module.exports.bookings = async (req, res) => {
 
 
 
-
         if (booking.affectedRows > 0) {
+            let getadmin = await model.GetAdmin()
 
-            await notify.addNotification(user_id,
+            await notify.addNotification(user_id,getadmin[0]?.u_id,
                 "user",
                 "Booking",
                 "Booking confirmed successfully",
@@ -56,7 +56,7 @@ module.exports.bookings = async (req, res) => {
 }
 module.exports.listbooking = async (req, res) => {
     try {
-        let { b_id ,user_id} = req.body || {}
+        let { b_id, user_id } = req.body || {}
         var condition = ''
         if (b_id) {
             condition = `where b_id ='${b_id}'`
