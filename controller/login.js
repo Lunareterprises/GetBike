@@ -1,6 +1,5 @@
 const model = require('../model/login');
 const bcrypt = require('bcrypt');
-
 const jwt = require('jsonwebtoken');
 
 
