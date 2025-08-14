@@ -2,11 +2,37 @@ var model = require('../model/booking');
 var moment = require("moment");
 const notify = require('../util/notification');
 
+<<<<<<< Updated upstream
 module.exports.bookings = async (req, res) => {
     try {
         var { user_id, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time } = req.body;
 
         if (!user_id || !bike_id || !pickup_location || !pickup_date || !pickup_time || !drop_location || !drop_date || !drop_time) {
+=======
+var moment=require("moment");
+const notify = require('../util/notification'); 
+
+module.exports.bookings=async(req,res)=>{
+    try{
+        var { user_id, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time ,selfie,adharcard,driving_license} = req.fields;
+
+        if(!user_id||!bike_id||!pickup_location||!pickup_date||!pickup_time||!drop_location||!drop_date||!drop_time||!selfie||!adharcard||!driving_license){
+
+        
+       
+        return res.send({
+            result:false,
+            message:"insufficent parameter"
+        })
+    }
+            const invoice = "INV" + moment().format('YYYYMMDD') + Math.floor(1000 + Math.random() * 9000);
+                 const booking_date = moment().format("YYYY-MM-DD");
+       
+    
+const booking= await model.checkbooking(user_id, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time,booking_date ,invoice,selfie,adharcard,driving_license);
+
+console.log("booking");
+>>>>>>> Stashed changes
 
 
 
@@ -88,6 +114,35 @@ module.exports.listbooking = async (req, res) => {
 
     }
 }
+<<<<<<< Updated upstream
+=======
+module.exports.listNotifications = async (req, res) => {
+    try {
+        let { user_id } = req.body;
+        const notifications = await notify.listNotification(user_id);
+
+        if (notifications.length > 0) {
+            return res.send({
+                result: true,
+                message: "Notifications retrieved",
+                list: notifications
+            });
+        } else {
+            return res.send({
+                result: false,
+                message: "No notifications found"
+            });
+        }
+    } catch (error) {
+        return res.send({
+            result: false,
+            message: error.message
+        });
+    }
+};
+
+    
+>>>>>>> Stashed changes
 
 
 
