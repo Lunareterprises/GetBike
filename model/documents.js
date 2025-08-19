@@ -1,17 +1,17 @@
-var db=require('../config/db');
+var db = require('../config/db');
 var util = require("util");
 const query = util.promisify(db.query).bind(db);
 
-module.exports.AddadharQuery=async(u_id,adharpath)=>{
- var Query =`update user SET u_adharcard=? where u_id=?`;
- var data= await query(Query,[adharpath, u_id]);
- return data;
-
+// ✅ Save Aadhar Path
+module.exports.AddadharQuery = async (adharPath, u_id) => {
+    var Query = `UPDATE user SET u_adharcard = ? WHERE u_id = ?`;
+    var data = await query(Query, [adharPath, u_id]);
+    return data;
 }
 
-module.exports.AddlicenseQuery=async(licensePath, u_id)=>{
-    var Query=`UPDATE user SET u_license = ? WHERE u_id = ?`;
-    var data= await query(Query,[licensePath, u_id]);
+// ✅ Save License Path
+module.exports.AddlicenseQuery = async (licensePath, u_id) => {
+    var Query = `UPDATE user SET u_license = ? WHERE u_id = ?`;
+    var data = await query(Query, [licensePath, u_id]);
     return data;
-
 }
