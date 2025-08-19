@@ -33,3 +33,34 @@ module.exports.listUser = async (req, res) => {
 
     }
 }
+module.exports.deleteUser = async (req, res) => {
+    try {
+        let { user_id } = req.body || {};
+
+        if (!user_id) {
+            return res.send({
+                result: false,
+                message: "user_id is required"
+            });
+        }
+
+        let result = await model.deleteUserQuery(user_id);
+
+        if (result.affectedRows > 0) {
+            return res.send({
+                result: true,
+                message: "User deleted successfully"
+            });
+        } else {
+            return res.send({
+                result: false,
+                message: "User not found"
+            });
+        }
+    } catch (error) {
+        return res.send({
+            result: false,
+            message: error.message,
+        });
+    }
+};
