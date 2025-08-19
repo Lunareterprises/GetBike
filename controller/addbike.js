@@ -16,16 +16,20 @@ module.exports.addbike = async (req, res) => {
                     data: err,
                 })
             }
-            let { name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed } = fields;
+            let { name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed,maintaince_status } = fields;
 
 
-            if (!name || !ratings || !description || !rate || !location || !extras || !milage || !geartype || !fueltype || !bhp || !distance || !max_speed) {
+            if (!name || !ratings || !description || !rate || !location || !extras || !milage || !geartype || !fueltype || !bhp || !distance || !max_speed||!maintaince_status) {
                 return res.send({
                     result: false,
                     message: "insufficent parameter",
 
                 })
             }
+             // 1️⃣ Insert bike details first
+            const bikeResult = await model.AddBikeQuery(name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed,maintaince_status);
+            const bike_id = bikeResult.insertId; // get new bike id
+
 
 
 
@@ -44,7 +48,7 @@ module.exports.addbike = async (req, res) => {
 
                     const imagePath = "/uploads/bikes/" + file.originalFilename;
 
-                    var insertResult = await model.AddImagesQuery(name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, imagePath);
+                    var insertResult = await model.AddBikeimageQuery( bike_id, imagePath);
                     // console.log(insertResult, "image insert result");
                     console.log("Insert result:", insertResult);
                 }
@@ -167,7 +171,7 @@ module.exports.editbikes = async (req, res) => {
                     data: err,
                 });
             }
-            const { b_id, name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed } = fields;
+            const { b_id, name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed,delete_old_images } = fields;
 
             if (!b_id) {
                 return res.send({
@@ -203,6 +207,10 @@ module.exports.editbikes = async (req, res) => {
             if (updates.length > 0) {
                 const updateQuery = `SET ${updates.join(', ')}`;
                 var updateResult = await model.UpdateBikesDetails(updateQuery, b_id);
+            }
+             // 2️⃣ Delete old images if requested
+            if (delete_old_images === 'true') {
+                await model.DeleteBikeImages(b_id); 
             }
 
             if (files.image) {

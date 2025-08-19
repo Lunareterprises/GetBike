@@ -71,5 +71,9 @@ route.post('/add/review',reviewadd)
 var{listUser}=require('./controller/listUser')
 route.post('/list/user',listUser)
 
+var { deleteUser } = require('./controller/listUser');
+route.post('/deleteUser', deleteUser);
+
+
 module.exports = route
 

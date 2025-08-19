@@ -3,7 +3,12 @@ var util=require("util");
 const query =util.promisify(db.query).bind(db);
 
 module.exports.SelectImage=async()=>{
-    var Query=`select  * from bikes;`
+    var Query=  `SELECT 
+            b_id, b_name, b_ratings, b_description, b_price, b_location, 
+            b_extras, b_milage, b_geartype, b_fueltype, b_bhp, distance, max_speed, b_image
+        FROM bikes
+        ORDER BY b_id DESC
+    `;
     var data= await query(Query);
     return data;
 
@@ -14,6 +19,14 @@ module.exports.AddImagesQuery=async(name, ratings, description, rate,location,ex
     return data;
 
 }
+module.exports.AddBikeimageQuery=async(bike_id, imagePath)=>{
+    var Query= `INSERT INTO bike_images(bike_id, image_path) VALUES (?, ?)`;
+    var data=await query(Query, [bike_id, imagePath]);
+    return data;
+}
+
+
+
 module.exports.listbikeQuery =async(condition)=>{
     var Query =`SELECT * FROM  bikes ${condition}`;
     var data =query(Query);
@@ -42,6 +55,12 @@ module.exports.UpdateBikesDetails=async (updateQuery,b_id) => {
     var data=await query(Query,[b_id]);
     return data;
   }
+  module.exports.DeleteBikeImages = async (b_id) => {
+    var Query= `DELETE FROM bike_images WHERE bike_id = ?`;
+    var data=await query(Query, [b_id]);
+    return data;
+  }
+    
 
   module.exports.UpdateBikesImage=async (imagePath, b_id) => {
     var Query= ` update bikes set b_image=? where b_id = ?`;

@@ -3,6 +3,13 @@ var model = require('../model/documents')
 var formidable = require("formidable");
 var fs = require("fs");
 var path = require("path");
+function ensureDirExist(dirPath) {
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+    }
+}
+
+
 module.exports.documents = async (req, res) => {
     try {
         var form = new formidable.IncomingForm({ multiplies: true })
@@ -36,9 +43,12 @@ module.exports.documents = async (req, res) => {
             if (files.adhar) {
                 const oldPath = files.adhar.filepath;
                 const fileName = files.adhar.originalFilename;
-                const newPath = path.join(process.cwd(), "uploads", "adharcard", fileName);
+                const saveDir = path.join(process.cwd(), "uploads", "adharcard");
+                 ensureDirExist(saveDir);
+                 const newPath = path.join(saveDir, fileName);
 
                 try {
+                   
                     const rawData = fs.readFileSync(oldPath);
                     fs.writeFileSync(newPath, rawData);
 
@@ -58,9 +68,13 @@ module.exports.documents = async (req, res) => {
             if (files.license) {
                 const oldPath = files.license.filepath;
                 const fileName = files.license.originalFilename;
-                const newPath = path.join(process.cwd(), "uploads", "licensecard", fileName);
+                const saveDir = path.join(process.cwd(), "uploads", "licensecard");
+                ensureDirExist(saveDir);
+                const newPath = path.join(saveDir, fileName);
+
 
                 try {
+                    
                     const rawData = fs.readFileSync(oldPath);
                     fs.writeFileSync(newPath, rawData);
 
