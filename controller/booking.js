@@ -79,6 +79,7 @@ module.exports.bookings = async (req, res) => {
         });
     }
 }
+
 module.exports.listbooking = async (req, res) => {
     try {
         let { b_id, user_id } = req.body || {}
@@ -86,10 +87,9 @@ module.exports.listbooking = async (req, res) => {
         if (b_id) {
             condition = `where b_id ='${b_id}'`
         }
-        if (user_id) {
+           if (user_id) {
             condition = `where b_u_id ='${user_id}'`
         }
-        
         let listbooking = await model.listbookingQuery(condition);
         if (listbooking.length > 0) {
             return res.send({
