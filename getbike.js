@@ -7,7 +7,7 @@ var http = require('http')
 const fs = require('fs');
 require('dotenv').config({ encoding: 'latin1' })
 
-//var privateKey = fs.readFileSync('/etc/ssl/private.key', 'utf8').toString();
+// var privateKey = fs.readFileSync('/etc/ssl/private.key', 'utf8').toString();
 
 // var certificate = fs.readFileSync('/etc/ssl/certificate.crt', 'utf8').toString();
 
@@ -15,7 +15,8 @@ require('dotenv').config({ encoding: 'latin1' })
 
 // var options = { key: privateKey, cert: certificate, ca: ca };
 
-//var server = https.createServer(options, app);
+// var server = https.createServer(options, app);
+
  var server = http.createServer(app);
 
 app.use(
@@ -33,4 +34,5 @@ app.use("/getbike", mainRoute);
 
 server.listen(6032, () => {
     console.log("server running on port 6032");
-});
+
+})

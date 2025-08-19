@@ -19,17 +19,14 @@ module.exports.listbookingQuery=async(condition)=>{
   var data= await query(Query);
   return data;
 }
-<<<<<<< Updated upstream
 
 module.exports.GetAdmin=async()=>{
   var Query=`SELECT * FROM user where u_role='admin'`;
   var data= await query(Query);
   return data;
 }
-=======
 module.exports.listNotificationQuery = async (condition) => {
      varQuery = `SELECT * FROM notifications ${condition}`;
      var data = await query(Query);
     return data;
 };
->>>>>>> Stashed changes
