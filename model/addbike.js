@@ -1,6 +1,5 @@
 var db=require('../config/db');
 var util=require("util");
-
 const query =util.promisify(db.query).bind(db);
 
 module.exports.SelectImage=async()=>{

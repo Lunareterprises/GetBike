@@ -1,4 +1,6 @@
-
+var db=require('../config/db');
+var util=require("util");
+const query =util.promisify(db.query).bind(db);
 
 module.exports.addNotification = async (userId,admin_id, userRole, type, message,status) => {
     try {
@@ -10,15 +12,6 @@ module.exports.addNotification = async (userId,admin_id, userRole, type, message
         return false;
     }
 }
-// module.exports.addNotification = async (userId, userRole, title, message, status) => {
-//     try {
-//         const result = await Notification.addNotification(userId, userRole, title, message, status);
-//         return result.affectedRows > 0;
-//     } catch (error) {
-//         console.log("Notification Error:", error.message);
-//         return false;
-//     }
-// };
 
 async function addNotification(user_id,admin_id, role, type, message,status){
   var Query= `insert into  notifications(user_id,admin_id,role,type,message,status) values(?,?,?,?,?,?)`;
