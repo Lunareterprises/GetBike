@@ -1,6 +1,5 @@
 const model = require('../model/login');
 const bcrypt = require('bcrypt');
-
 const jwt = require('jsonwebtoken');
 
 
@@ -14,7 +13,6 @@ module.exports.login = async (req, res) => {
 
       });
     }
-    const SECRET_KEY = 'dkjghkdghfhglknghdxlkdnflsfjopoijoigjhpokp';
 
     const checkUser = await model.CheckUser(emailorphone_number, role);
 
@@ -41,7 +39,7 @@ module.exports.login = async (req, res) => {
       u_role: checkUser[0].u_role
 
     };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1h' });
     // Respond with user data and token
     return res.status(200).json({
       result: true,

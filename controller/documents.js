@@ -12,7 +12,7 @@ function ensureDirExist(dirPath) {
 
 module.exports.documents = async (req, res) => {
     try {
-         var form = new formidable.IncomingForm({ multiplies: true })
+        var form = new formidable.IncomingForm({ multiplies: true })
         form.parse(req, async function (err, fields, files) {
             if (err) {
                 return res.send({
@@ -22,15 +22,15 @@ module.exports.documents = async (req, res) => {
 
                 });
             }
-            let{u_id}=fields;
+            let { u_id } = fields;
 
-            if(!u_id){
-                 return res.send({
+            if (!u_id) {
+                return res.send({
                     result: false,
                     message: "User ID is required.",
                 });
             }
-            
+
             if (!files.adhar || !files.license) {
                 return res.send({
                     result: false,
@@ -53,9 +53,9 @@ module.exports.documents = async (req, res) => {
                     fs.writeFileSync(newPath, rawData);
 
                     const adharPath = "uploads/adharcard/" + fileName;
-                    await model.AddadharQuery(adharPath,u_id);
+                    await model.AddadharQuery(adharPath, u_id);
                 } catch (error) {
-                    console.log( error);
+                    console.log(error);
                     return res.send({
                         result: false,
                         message: "Failed to save Aadhar file.",
@@ -79,25 +79,25 @@ module.exports.documents = async (req, res) => {
                     fs.writeFileSync(newPath, rawData);
 
                     const licensePath = "uploads/licensecard/" + fileName;
-                    await model.AddlicenseQuery(licensePath,u_id);
+                    await model.AddlicenseQuery(licensePath, u_id);
                 } catch (error) {
                     console.log(error);
                     return res.send({
                         result: false,
                         message: "Failed to save License file.",
                         data: error
-                       
+
                     });
                 }
             }
-            
+
 
             return res.send({
                 result: true,
                 message: "Documents uploaded successfully"
             });
         });
-        
+
     } catch (error) {
         console.log(error);
         return res.send({
@@ -108,5 +108,4 @@ module.exports.documents = async (req, res) => {
 };
 
 
-        
- 
+

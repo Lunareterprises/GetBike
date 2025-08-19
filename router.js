@@ -62,6 +62,8 @@ route.post('/update/status',updateBookingStatus)
 var{listbooking}=require('./controller/booking')
 route.post('/list/booking',listbooking)
 
+var{listNotification}=require('./controller/listnotification')
+route.post('/list/notification',listNotification)
 
 var{reviewadd}=require('./controller/review')
 route.post('/add/review',reviewadd)
@@ -75,4 +77,3 @@ route.post('/deleteUser', deleteUser);
 
 module.exports = route
 
- module.exports = route

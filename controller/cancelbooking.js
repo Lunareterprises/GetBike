@@ -1,9 +1,9 @@
-var model=require('../model/cancelbooking')
-const notify = require('../util/notification'); 
+var model = require('../model/cancelbooking')
+const notify = require('../util/notification');
 
 module.exports.cancelBooking = async (req, res) => {
     try {
-        let{ b_id, b_u_id } = req.body;
+        let { b_id, b_u_id } = req.body;
 
         if (!b_id || !b_u_id) {
             return res.send({
@@ -14,9 +14,9 @@ module.exports.cancelBooking = async (req, res) => {
         const cancelResult = await model.cancelBookingById(b_id, b_u_id);
 
         if (cancelResult.affectedRows > 0) {
-            // Send notification
-            await notify.addNotification(
-                b_u_id,
+            let getadmin = await model.GetAdmin()
+
+            await notify.addNotification(b_u_id, getadmin[0]?.u_id,
                 "user",
                 "Booking Cancelled",
                 "Your booking has been cancelled successfully.",
@@ -24,29 +24,29 @@ module.exports.cancelBooking = async (req, res) => {
             );
 
             return res.send({
-                  result: true,
+                result: true,
                 message: "Booking  cancelled successfully"
             });
         }
-          else {
+        else {
             return res.send({
                 result: false,
                 message: "Booking not found or already cancelled"
             });
         }
     }
-    catch(error){
-            
- return res.send({
+    catch (error) {
+
+        return res.send({
             result: false,
             message: error.message
         });
     }
 }
-        
-            
 
-        
-   
+
+
+
+
 
 

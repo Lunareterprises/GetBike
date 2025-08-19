@@ -14,15 +14,9 @@ module.exports.SelectImage=async()=>{
     return data;
 
 }
-<<<<<<< Updated upstream
-module.exports.AddImagesQuery=async(name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath)=>{
-    var Query=`insert into bikes(b_name,b_ratings,b_reviews,b_description,b_price,b_location,b_extras,b_milage,b_geartype,b_fueltype,b_bhp,distance,max_speed,b_image) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
-    var data= await query(Query,[name, ratings, review, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath]);
-=======
-module.exports.AddBikeQuery=async(name, ratings, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,maintaince_status,imagePath)=>{
-    var Query=`insert into bikes(b_name,b_ratings,b_description,b_price,b_location,b_extras,b_milage,b_geartype,b_fueltype,b_bhp,distance,max_speed,maintaince_status,b_image) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
-    var data= await query(Query,[name, ratings, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,maintaince_status,imagePath]);
->>>>>>> Stashed changes
+module.exports.AddImagesQuery=async(name, ratings, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath)=>{
+    var Query=`insert into bikes(b_name,b_ratings,b_description,b_price,b_location,b_extras,b_milage,b_geartype,b_fueltype,b_bhp,distance,max_speed,b_image) values(?,?,?,?,?,?,?,?,?,?,?,?,?);`
+    var data= await query(Query,[name, ratings, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath]);
     return data;
 
 }
@@ -37,6 +31,12 @@ module.exports.AddBikeimageQuery=async(bike_id, imagePath)=>{
 module.exports.listbikeQuery =async(condition)=>{
     var Query =`SELECT * FROM  bikes ${condition}`;
     var data =query(Query);
+    return data;
+}
+
+module.exports.getbikeReview =async(bike_id)=>{
+    var Query =`SELECT * FROM  bike_reviews where br_bike_id =?`;
+    var data =query(Query,[bike_id]);
     return data;
 }
 
