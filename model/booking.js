@@ -30,7 +30,7 @@ module.exports.listNotificationQuery = async (condition) => {
     return data;
 };
 module.exports.getOneBikeImage = async (bike_id) => {
-    var Query = `SELECT image_path FROM bike_images WHERE bike_id= ? LIMIT 1`;
+    var Query = `SELECT * FROM bike_images WHERE bike_id= ? LIMIT 1`;
     var data = await query(Query, [bike_id]);
     return data;
 };
