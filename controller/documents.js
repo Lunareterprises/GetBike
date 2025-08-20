@@ -31,12 +31,7 @@ module.exports.documents = async (req, res) => {
                 });
             }
 
-            if (!files.adhar || !files.license) {
-                return res.send({
-                    result: false,
-                    message: "Insufficient parameter"
-                });
-            }
+
             console.log(u_id);
 
             // ✅ Handle Aadhar Upload
