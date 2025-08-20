@@ -3,12 +3,6 @@ var model = require('../model/documents')
 var formidable = require("formidable");
 var fs = require("fs");
 var path = require("path");
-function ensureDirExist(dirPath) {
-    if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath, { recursive: true });
-    }
-}
-
 
 module.exports.documents = async (req, res) => {
     try {
@@ -39,8 +33,10 @@ module.exports.documents = async (req, res) => {
                 const oldPath = files.adhar.filepath;
                 const fileName = files.adhar.originalFilename;
                 const saveDir = path.join(process.cwd(), "uploads", "adharcard");
-                 ensureDirExist(saveDir);
-                 const newPath = path.join(saveDir, fileName);
+                if (!fs.existsSync(saveDir)) {
+                    fs.mkdirSync(saveDir, { recursive: true });
+                }
+                const newPath = path.join(saveDir, fileName);
 
                 try {
                    
