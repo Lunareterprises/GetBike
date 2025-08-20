@@ -14,7 +14,7 @@ module.exports.EditPersonalInfo = async (req, res) => {
                 });
             }
 
-            let { u_id, name, email, mobile, date  } = fields
+            let { u_id, name, email, mobile, dob  } = fields
 
             if (!u_id) {
                 return res.send({
@@ -53,11 +53,11 @@ module.exports.EditPersonalInfo = async (req, res) => {
                         condition += `,u_mobile='${mobile}'`
                     }
                 }
-                if (date) {
+                if (dob) {
                     if (condition == '') {
-                        condition = `set u_joindate ='${date}' `
+                        condition = `set u_dob ='${dob}' `
                     } else {
-                        condition += `,u_joindate='${date}'`
+                        condition += `,u_dob='${dob}'`
                     }
                 }
                
