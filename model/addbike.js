@@ -31,10 +31,10 @@ module.exports.listbikeQuery =async(condition)=>{
     var Query =`SELECT * FROM  bikes ${condition}`;
     var data =query(Query);
     return data;
-}
+} 
 
 module.exports.getbikeReview =async(bike_id)=>{
-    var Query =`SELECT * FROM  bike_reviews where br_bike_id =?`;
+    var Query =`SELECT r.*,u.u_name,u.u_profile_pic FROM  bike_reviews r LEFT JOIN user u on r.br_used_id = u.u_id where r.br_bike_id =?`;
     var data =query(Query,[bike_id]);
     return data;
 }

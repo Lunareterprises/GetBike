@@ -3,18 +3,19 @@ var util=require("util");
 
 module.exports.reviewadd = async (req, res) => {
   try {
-    let { bike_id, rating, review } = req.body;
+     console.log("BODY RECEIVED:", req.body);
+    let { bike_id, rating, review ,userid} = req.body;
 
     // Validate params
-    if (!bike_id || !rating || !review) {
+    if (!bike_id || !rating || !review ||!userid) {
       return res.send({
         result: false,
         message: "Insufficient parameters"
       });
     }
-   console.log(bike_id, rating, review);
+   console.log(bike_id, rating, review,userid);
 
-
+let date = new Date()
     if (rating < 0 || rating > 5) {
       return res.send({
         result: false,
@@ -23,7 +24,9 @@ module.exports.reviewadd = async (req, res) => {
     }
 
     // Insert review
-    let insertResult = await model.addReviewQuery(bike_id, rating, review);
+    console.log(userid);
+   let insertResult = await model.addReviewQuery(bike_id, rating, review, date, userid);
+
 
     if (insertResult.affectedRows > 0) {
       // Get all ratings for this bike
