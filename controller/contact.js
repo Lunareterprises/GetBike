@@ -1,8 +1,21 @@
 const model = require('../model/contact');
 var nodemailer = require("nodemailer");
+var formidable = require("formidable");
+var fs = require("fs");
+var path = require("path");
 
 module.exports.ContactUs = async (req, res) => {
-    var { name, email, message, phonenumber, issuetype } = req.body;
+    try{
+        const form = new formidable.IncomingForm({ multiples: false });
+        form.parse(req, async (err, fields, files) => {
+            if (err) {
+                return res.send({
+                    result:false,
+                    message:'File upload failed!',
+                    data:err.message
+                })
+            }
+    var { name, email, message, phonenumber, issuetype } = fields;
 
     if (!name || !email || !message || !phonenumber || !issuetype) {
         return res.send({
@@ -14,7 +27,31 @@ module.exports.ContactUs = async (req, res) => {
         message = "no message"
     }
 
-    let checkcontact = await model.addcontactQuery(name, email, message, phonenumber, issuetype)
+
+    const contactInsert = await model.addcontactQuery(name, email, message, phonenumber, issuetype)
+   const  c_id = contactInsert.insertId;
+
+    
+                if (files && files.image) {
+                    // Normalize to array: handles both single and multiple image uploads
+                    const imageFiles = Array.isArray(files.image) ? files.image : [files.image];
+    
+                    for (const file of imageFiles) {
+                        if (!file || !file.filepath || !file.originalFilename) continue;
+    
+                        const oldPath = file.filepath;
+                        const newPath = path.join(process.cwd(), '/uploads/contact', file.originalFilename);
+    
+                        const rawData = fs.readFileSync(oldPath);
+                        fs.writeFileSync(newPath, rawData);
+    
+                        const imagePath = "/uploads/contact/" + file.originalFilename;
+    
+                        var insertResult = await model.AddcontactimageQuery(c_id , imagePath);
+                        // console.log(insertResult, "image insert result");
+                        console.log("Insert result:", insertResult);
+                    }
+    
 
     let transporter = nodemailer.createTransport({
         host: "smtp.hostinger.com",
@@ -172,12 +209,25 @@ module.exports.ContactUs = async (req, res) => {
 
     });
 
-
     return res.send({
         status: true,
         message: "mail sent",
     });
-};
+}
+})
+    
+     } catch (error) {
+        return res.send({
+            result: false,
+            message: error.message,
+        });
+            
+
+
+        }
+    }
+        
+        
 module.exports.listcontact = async (req, res) => {
     try {
 
@@ -201,7 +251,7 @@ module.exports.listcontact = async (req, res) => {
 
     } catch (error) {
         return res.send({
-            reult: false,
+            result: false,
             message: error.message,
         });
 
