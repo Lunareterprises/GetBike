@@ -5,9 +5,9 @@ const query =util.promisify(db.query).bind(db);
 
 
 
-module.exports.addReviewQuery = (bike_id, rating, review) => {
-    var Query = `insert into   bike_reviews(br_bike_id, br_rating, br_review)values(?,?,?)`;
-    var data = query(Query, [bike_id, rating, review]);
+module.exports.addReviewQuery = (bike_id, rating, review,date,userid) => {
+    var Query = `insert into   bike_reviews(br_bike_id, br_rating, br_review,date,br_used_id)values(?,?,?,?,?)`;
+    var data = query(Query, [bike_id, rating, review,date,userid]);
     return data;
 
 

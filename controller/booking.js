@@ -20,18 +20,15 @@ module.exports.bookings = async (req, res) => {
             const invoice = "INV" + moment().format('YYYYMMDD') + Math.floor(1000 + Math.random() * 9000);
             const booking_date = moment().format("YYYY-MM-DD");
 
-            var { user_id, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time } = fields;
-            let selfie = files.selfie ? files.selfie.newFilename : null;
-            let adharcard = files.adharcard ? files.adharcard.newFilename : null;
-            let license = files.license ? files.license.newFilename : null;
+            var { user_id, bike_name, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time, adharcard, license } = fields;
 
 
 
 
+            // console.log(fields,"fillll");
 
 
-            if (!user_id || !bike_id || !pickup_location || !pickup_date || !pickup_time || !drop_location || !drop_date || !drop_time || !invoice || !selfie || !adharcard || !license) {
-
+            if (!user_id || !bike_name || !bike_id || !pickup_location || !pickup_date || !pickup_time || !drop_location || !drop_date || !drop_time || !adharcard || !license) {
                 return res.send({
                     result: false,
                     message: "insufficent parameter"
@@ -39,11 +36,34 @@ module.exports.bookings = async (req, res) => {
             }
 
 
-            const booking = await model.checkbooking(user_id, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time, booking_date, invoice, selfie, adharcard, license);
+            const booking = await model.checkbooking(user_id, bike_name, bike_id, pickup_location, pickup_date, pickup_time, drop_location, drop_date, drop_time, booking_date, invoice, adharcard, license);
 
-
+            let booking_id = booking.insertId
 
             if (booking.affectedRows > 0) {
+
+
+                if (files && files.selfie) {
+                    const imageFiles = Array.isArray(files.selfie) ? files.selfie : [files.selfie];
+
+                    for (const file of imageFiles) {
+                        if (!file || !file.filepath || !file.originalFilename) continue;
+
+                        const oldPath = file.filepath;
+                        const newPath = path.join(process.cwd(), '/uploads/booking', file.originalFilename);
+
+                        const rawData = fs.readFileSync(oldPath);
+                        fs.writeFileSync(newPath, rawData);
+
+                        const selfiepath = "/uploads/booking/" + file.originalFilename;
+
+                        var insertResult = await model.AddBookingImageQuery(selfiepath,booking_id);
+                        // console.log(insertResult, "image insert result");
+                        console.log("Insert result:", insertResult);
+                    }
+                }
+
+
                 let getadmin = await model.GetAdmin()
                 let bikeImagePath = await model.getOneBikeImage(bike_id);
                 // console.log("bikeImagePath :",bikeImagePath[0]?.image_path);
@@ -59,7 +79,7 @@ module.exports.bookings = async (req, res) => {
                 );
                 return res.send({
                     result: true,
-                    message: 'booking conformed and notification added',
+                    message: 'booking conformed ',
 
                 })
             }
@@ -79,6 +99,7 @@ module.exports.bookings = async (req, res) => {
         });
     }
 }
+
 module.exports.listbooking = async (req, res) => {
     try {
         let { b_id, user_id } = req.body || {}
@@ -89,7 +110,6 @@ module.exports.listbooking = async (req, res) => {
         if (user_id) {
             condition = `where b_u_id ='${user_id}'`
         }
-        
         let listbooking = await model.listbookingQuery(condition);
         if (listbooking.length > 0) {
             return res.send({

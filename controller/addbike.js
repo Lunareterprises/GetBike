@@ -102,6 +102,10 @@ module.exports.listbike = async (req, res) => {
                 listbike.map(async (bike) => {
                     let bike_id = bike.b_id
                     let bikereviews = await model.getbikeReview(bike_id);
+                    bikereviews.forEach(async(el) => {
+                        
+                        
+                    });
                     bike.bikereviews = bikereviews
                     return bike
                 })
