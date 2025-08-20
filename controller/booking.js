@@ -4,6 +4,7 @@ const notify = require('../util/notification');
 var formidable = require("formidable");
 var fs = require("fs");
 var path = require("path");
+const { promises } = require('dns');
 
 module.exports.bookings = async (req, res) => {
     try {
@@ -57,7 +58,7 @@ module.exports.bookings = async (req, res) => {
 
                         const selfiepath = "/uploads/booking/" + file.originalFilename;
 
-                        var insertResult = await model.AddBookingImageQuery(selfiepath,booking_id);
+                        var insertResult = await model.AddBookingImageQuery(selfiepath, booking_id);
                         // console.log(insertResult, "image insert result");
                         console.log("Insert result:", insertResult);
                     }
@@ -112,10 +113,19 @@ module.exports.listbooking = async (req, res) => {
         }
         let listbooking = await model.listbookingQuery(condition);
         if (listbooking.length > 0) {
+            let getbooking = await Promise.all(
+                listbooking.map(async (el) => {
+                    let bike_id = el.b_bk_id
+                    let bikeImagePath = await model.getOneBikeImage(bike_id);
+                    el.bikeImagePath = bikeImagePath
+                    return el
+                }
+                )
+            )
             return res.send({
                 result: true,
                 message: "data retrived",
-                list: listbooking
+                list: getbooking
             });
 
         } else {
