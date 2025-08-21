@@ -22,8 +22,8 @@ module.exports.ContactUs = async (req, res) => {
         auth: {
             type: 'custom',
             method: 'PLAIN',
-            user: 'noreply@drlifeboat.com',
-            pass: 'Drlifeboat@noreply123',
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD,
         },
     });
 
@@ -86,7 +86,7 @@ module.exports.ContactUs = async (req, res) => {
 
         <div class="footer">
             <p>Thank you!</p>
-            <p>LOZARA STORE TEAMS</p>
+            <p>GETBIKE STORE TEAMS</p>
         </div>
     </div>
 </body>
@@ -95,7 +95,7 @@ module.exports.ContactUs = async (req, res) => {
 `
     },
     {
-        email: 'support@kapnastore.com',
+        email: 'jaisonlunar701@gmail.com',
         subject: ` New Enquiry From : ${name}`,
         html: `<!DOCTYPE html>
 <html lang="en">
@@ -163,7 +163,7 @@ module.exports.ContactUs = async (req, res) => {
 
     data.forEach(async (el) => {
         let infos = await transporter.sendMail({
-            from: "LOZARA<noreply@drlifeboat.com>",
+            from: `GETBIKE<${process.env.EMAIL}>`,
             to: el.email,
             subject: el.subject,
             html: el.html
