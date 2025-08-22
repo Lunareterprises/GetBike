@@ -16,18 +16,18 @@ module.exports.addbike = async (req, res) => {
                     data: err,
                 })
             }
-            let { name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed,maintaince_status } = fields;
+            let { name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status } = fields;
 
 
-            if (!name || !ratings || !description || !rate || !location || !extras || !milage || !geartype || !fueltype || !bhp || !distance || !max_speed||!maintaince_status) {
+            if (!name || !ratings || !description || !rate || !location || !extras || !milage || !geartype || !fueltype || !bhp || !distance || !max_speed || !maintaince_status) {
                 return res.send({
                     result: false,
                     message: "insufficent parameter",
 
                 })
             }
-             // 1️⃣ Insert bike details first
-            const bikeResult = await model.AddBikeQuery(name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed,maintaince_status);
+            // 1️⃣ Insert bike details first
+            const bikeResult = await model.AddBikeQuery(name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status);
             const bike_id = bikeResult.insertId; // get new bike id
 
 
@@ -48,7 +48,7 @@ module.exports.addbike = async (req, res) => {
 
                     const imagePath = "/uploads/bikes/" + file.originalFilename;
 
-                    var insertResult = await model.AddBikeimageQuery( bike_id, imagePath);
+                    var insertResult = await model.AddBikeimageQuery(bike_id, imagePath);
                     // console.log(insertResult, "image insert result");
                     console.log("Insert result:", insertResult);
                 }
@@ -101,9 +101,11 @@ module.exports.listbike = async (req, res) => {
             let getbikes = await Promise.all(
                 listbike.map(async (bike) => {
                     let bike_id = bike.b_id
+                    let bikeimages = await model.bikeImages(bike_id);
                     let bikereviews = await model.getbikeReview(bike_id);
-                    bike.bikereviews = bikereviews
-                    return bike
+                    bike.bikeimages = bikeimages;
+                    bike.bikereviews = bikereviews;
+                    return bike;
                 })
             )
             return res.send({
@@ -171,7 +173,7 @@ module.exports.editbikes = async (req, res) => {
                     data: err,
                 });
             }
-            const { b_id, name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed,delete_old_images } = fields;
+            const { b_id, name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, delete_old_images } = fields;
 
             if (!b_id) {
                 return res.send({
@@ -208,9 +210,9 @@ module.exports.editbikes = async (req, res) => {
                 const updateQuery = `SET ${updates.join(', ')}`;
                 var updateResult = await model.UpdateBikesDetails(updateQuery, b_id);
             }
-             // 2️⃣ Delete old images if requested
+            // 2️⃣ Delete old images if requested
             if (delete_old_images === 'true') {
-                await model.DeleteBikeImages(b_id); 
+                await model.DeleteBikeImages(b_id);
             }
 
             if (files.image) {
