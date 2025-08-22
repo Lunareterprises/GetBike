@@ -24,6 +24,6 @@ module.exports.removecontactQuery =async(c_id)=>{
 }
 module.exports.AddcontactimageQuery=async(c_id,imagepath)=>{
     var Query=`update  ContactUs SET c_image =? WHERE c_id =?`;
-    var data=await query(Query,[c_id,imagepath])
+    var data=await query(Query,[imagepath, c_id])
     return data;
 }

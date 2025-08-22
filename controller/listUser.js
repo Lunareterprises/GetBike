@@ -1,6 +1,5 @@
 var model = require('../model/listUser');
 
-
 module.exports.listUser = async (req, res) => {
     try {
         let { user_id, admin } = req.body || {}
@@ -58,7 +57,7 @@ module.exports.deleteUser = async (req, res) => {
         if (!user_id) {
             return res.send({
                 result: false,
-                message: "user_id is required"
+                message: "user id is required"
             });
         }
 
