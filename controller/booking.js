@@ -144,6 +144,71 @@ module.exports.listbooking = async (req, res) => {
 
     }
 }
+module.exports.extendbooking = async (req, res) => {
+    try {
+        let { b_id, new_drop_date, new_drop_time, new_drop_location, extend_reason } = req.body;
+        if (!b_id || !new_drop_date || !new_drop_time || !new_drop_location) {
+
+            return res.send({
+                result: false,
+                message: "insufficent parameter"
+            })
+        }
+        let booking = await model.getUserIdByBooking(b_id);
+        if (booking.length == 0) {
+            return res.send({
+                result: false,
+                message: "Booking not found "
+            });
+        }
+
+        let user_id = booking[0].b_u_id
+
+        const result = await model.extendbookingQuery(b_id, new_drop_date, new_drop_time, new_drop_location, extend_reason);
+
+        if (result.affectedRows > 0) {
+            let getadmin = await model.GetAdmin();
+
+
+            await notify.addNotification(
+                user_id,                       // sender (user)
+                getadmin[0]?.u_id,             // receiver (admin)
+                "user",
+                "Booking Extended",
+                `Booking #${b_id} extended until ${new_drop_date} ${new_drop_time} at ${new_drop_location}`,
+                "unread"
+            );
+
+            return res.send({
+                result: true,
+                message: "Booking extended successfully & notifications sent",
+                updated: {
+                    drop_date: new_drop_date,
+                    drop_time: new_drop_time,
+                    drop_location: new_drop_location,
+                    extend_reason: extend_reason,
+                    status: "extended"
+                }
+            });
+
+        }
+        else {
+            return res.send({
+                result: false,
+                message: "Booking not found or not updated"
+            });
+        }
+
+
+    } catch (error) {
+
+        return res.send({
+            result: false,
+            message: error.message,
+        });
+    }
+
+}
 
 
 

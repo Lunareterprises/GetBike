@@ -23,7 +23,7 @@ module.exports.removecontactQuery =async(c_id)=>{
     return data;
 }
 module.exports.AddcontactimageQuery=async(c_id,imagepath)=>{
-    var Query=`insert into ContactUs (c_id,c_image)values(?,?)`;
+    var Query=`update  ContactUs SET c_image =? WHERE c_id =?`;
     var data=await query(Query,[c_id,imagepath])
     return data;
 }
