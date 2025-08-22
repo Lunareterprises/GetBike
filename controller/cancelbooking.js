@@ -11,7 +11,16 @@ module.exports.cancelBooking = async (req, res) => {
                 message: "Insufficient parameters"
             });
         }
-        const cancelResult = await model.cancelBookingById(status,view_reason,b_id, b_u_id);
+          const booking = await model.findBooking(b_id, b_u_id);
+        if (booking.length === 0) {
+            return res.send({
+                result: false,
+                message: "Booking not found"
+            });
+        }
+       const cancelResult = await model.cancelBookingById(b_id, b_u_id,  view_reason);
+       
+
 
         if (cancelResult.affectedRows > 0) {
             let getadmin = await model.GetAdmin()
