@@ -4,13 +4,13 @@ const query = util.promisify(db.query).bind(db);
 
 
 module.exports.listUserQuery=async(condition)=>{
-  var Query=`SELECT * FROM  user where role = 'user' ${condition} `;
+  var Query=`SELECT * FROM  user where u_role = 'user' ${condition} `;
   var data= await query(Query);
   return data;
 }
 
 module.exports.listAdminQuery=async()=>{
-  var Query=`SELECT * FROM  user where role = 'admin' `;
+  var Query=`SELECT * FROM  user where u_role = 'admin' `;
   var data= await query(Query);
   return data;
 }

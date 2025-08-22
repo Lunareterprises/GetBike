@@ -4,6 +4,11 @@ var formidable = require("formidable");
 var fs = require("fs");
 var path = require("path");
 
+
+
+
+
+
 module.exports.documents = async (req, res) => {
     try {
         var form = new formidable.IncomingForm({ multiplies: true })
@@ -60,7 +65,9 @@ module.exports.documents = async (req, res) => {
                 const oldPath = files.license.filepath;
                 const fileName = files.license.originalFilename;
                 const saveDir = path.join(process.cwd(), "uploads", "licensecard");
-                ensureDirExist(saveDir);
+                if (!fs.existsSync(saveDir)) {
+                    fs.mkdirSync(saveDir, { recursive: true });
+                }
                 const newPath = path.join(saveDir, fileName);
 
 
