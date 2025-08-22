@@ -74,6 +74,9 @@ route.post('/list/user',listUser)
 var { deleteUser } = require('./controller/listUser');
 route.post('/deleteUser', deleteUser);
 
+var{extendbooking } =require('./controller/booking');
+route.post('/extend/booking', extendbooking);
+
 
 module.exports = route
 

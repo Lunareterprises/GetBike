@@ -1,5 +1,6 @@
 var db=require('../config/db');
 var util =require("util");
+const { bookings } = require('../controller/booking');
 const query = util.promisify(db.query).bind(db);
 
 
@@ -38,6 +39,23 @@ module.exports.AddBookingImageQuery = async (selfie_path,booking_id) => {
     var Query = `UPDATE bookings SET b_selfie = ? WHERE b_id = ?`;
     var data = await query(Query, [selfie_path, booking_id]);
     return data;
+};
+module.exports.extendbookingQuery=async(b_id,new_drop_date, new_drop_time, new_drop_location,  extend_reason)=>{
+  var Query=`update bookings SET b_drop_date =?,b_drop_time=?,b_drop_location=?,extend_reason=?,b_status='extendedreq' WHERE b_id=?`;
+  var data=await query(Query,[new_drop_date, new_drop_time, new_drop_location,  extend_reason,b_id]);
+  return data;
+
+}
+module.exports.GetAdmin = async () => {
+    var Query = `SELECT * FROM user WHERE u_role = 'admin'`;
+    var data = await query(Query);
+    return data;
+};
+
+module.exports.getUserIdByBooking = async (b_id) => {
+  var Query = `SELECT * FROM bookings WHERE b_id = ?`;
+  var data = await query(Query, [b_id]);
+  return data;
 };
 
 

@@ -12,12 +12,14 @@ module.exports.updateBookingStatus = async (req, res) => {
             });
         }
 
-        if (!["approved", "rejected"].includes(b_status)) {
+        if (!["approved", "rejected","completed","cancelled","cancelreq","onride",].includes(b_status)) {
             return res.send({
                 result: false,
                 message: "Invalid status value"
             });
         }
+        console.log("STATUS RECEIVED:", req.body.b_status);
+
 
         const result = await model.updateBookingStatus(b_id, b_status);
 
