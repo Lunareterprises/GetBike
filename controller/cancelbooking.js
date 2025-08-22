@@ -3,15 +3,15 @@ const notify = require('../util/notification');
 
 module.exports.cancelBooking = async (req, res) => {
     try {
-        let { b_id, b_u_id } = req.body;
+        let { b_id, b_u_id ,status, view_reason} = req.body;
 
-        if (!b_id || !b_u_id) {
+        if (!b_id || !b_u_id|| !view_reason) {
             return res.send({
                 result: false,
                 message: "Insufficient parameters"
             });
         }
-        const cancelResult = await model.cancelBookingById(b_id, b_u_id);
+        const cancelResult = await model.cancelBookingById(status,view_reason,b_id, b_u_id);
 
         if (cancelResult.affectedRows > 0) {
             let getadmin = await model.GetAdmin()
