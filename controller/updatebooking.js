@@ -21,7 +21,7 @@ module.exports.updateBookingStatus = async (req, res) => {
         console.log("STATUS RECEIVED:", req.body.b_status);
 
 
-        const result = await model.updateBookingStatus(b_id, b_status);
+        const result = await model.updateBookingStatus(b_id,b_u_id, b_status);
 
         if (result.affectedRows > 0) {
             // Send notification to user
