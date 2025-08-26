@@ -16,10 +16,10 @@ module.exports.addbike = async (req, res) => {
                     data: err,
                 })
             }
-            let { name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status } = fields;
+            let { name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status,center } = fields;
 
 
-            if (!name || !ratings || !description || !rate || !location || !extras || !milage || !geartype || !fueltype || !bhp || !distance || !max_speed || !maintaince_status) {
+            if (!name || !ratings || !description || !rate || !location || !extras || !milage || !geartype || !fueltype || !bhp || !distance || !max_speed || !maintaince_status||!center) {
                 return res.send({
                     result: false,
                     message: "insufficent parameter",
@@ -27,7 +27,7 @@ module.exports.addbike = async (req, res) => {
                 })
             }
             // 1️⃣ Insert bike details first
-            const bikeResult = await model.AddBikeQuery(name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status);
+            const bikeResult = await model.AddBikeQuery(name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status,center);
             const bike_id = bikeResult.insertId; // get new bike id
 
 
@@ -173,7 +173,7 @@ module.exports.editbikes = async (req, res) => {
                     data: err,
                 });
             }
-            const { b_id, name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, delete_old_images } = fields;
+            const { b_id, name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, delete_old_images,center } = fields;
 
             if (!b_id) {
                 return res.send({
@@ -203,6 +203,7 @@ module.exports.editbikes = async (req, res) => {
             if (bhp) updates.push(`b_bhp='${bhp}'`);
             if (distance) updates.push(`distance='${distance}'`);
             if (max_speed) updates.push(`max_speed='${max_speed}'`);
+            if(center)updates.push(`center='${center}'`);
 
 
 
