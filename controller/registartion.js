@@ -15,9 +15,12 @@ module.exports.Register = async (req, res) => {
         }
         var date = moment().format('YYYY-MM-DD')
           const checkmail = await model.CheckMail(email);
+
         const checkmobile = await model.checkmobile(mobile);
         
-
+if (checkmail[0].verify_email == false) {
+    let deleteuser =await model.deleteUserQuery(email)
+}
         if (checkmail.length > 0) {
 
             return res.send({
@@ -51,7 +54,7 @@ module.exports.Register = async (req, res) => {
 
 
 
-        let adduser = await model.AddUser(name, email, hashedpasssword, mobile, date,otpExpiry,role);
+        let adduser = await model.AddUser(name, email, hashedpasssword, mobile, date,otp,otpExpiry,role);
         
         
         const userId = adduser.insertId;
@@ -151,4 +154,49 @@ module.exports.Register = async (req, res) => {
     }
 
     } 
-
+   
+   module.exports.verifyOtp = async (req, res) => {
+       try {
+           const { email, otp } = req.body;
+   
+           if (!email || !otp) {
+               return res.status(400).send({
+                   result: false,
+                   message: "Email and OTP are required"
+               });
+           }
+   
+           const tokenInfo = await model.ValidateResetToken(email, otp);
+   
+           if (!tokenInfo || tokenInfo.length === 0) {
+               return res.status(400).send({
+                   result: false,
+                   message: "Invalid OTP"
+               });
+           }
+   
+           const tokenExpiry = moment(tokenInfo[0].u_token_expiry);
+   
+           if (moment().isAfter(tokenExpiry)) {
+               return res.status(400).send({
+                   result:false,
+                   message: "OTP has expired"
+               });
+           }
+   
+           await model.updateOtpStatus(email, "verified");
+           await model.updateemail(email,"true")
+   
+           return res.send({
+               result: true,
+               message: "OTP verified successfully"
+           });
+   
+       } catch (error) {
+           console.error("Error verifying OTP:", error);
+           return res.status(500).send({
+               result: false,
+               message: "Internal server error"
+           });
+       }
+   };
