@@ -3,7 +3,7 @@ var util =require("util");
 const query = util.promisify(db.query).bind(db);
 
 module.exports.CheckMail = async (email) => {
-    var Query = `select * from user where u_email =?`;
+    var Query = `select * from user where u_email =? and verify_email ='true'`;
     var data = query(Query, [email]);
     return data;
 }
@@ -19,4 +19,24 @@ module.exports.checkmobile=async(mobile)=>{
     return data;
 
 }
+module.exports.updateOtpStatus =async (email,status)=>{
+    var Query=`update user set u_otp_status=? where u_email=?`;
+    var  data =await query(Query,[status,email])
+    return data;
+}
+module.exports.ValidateResetToken =async(email,otp)=>{
+    var Query= `select * FROM user WHERE u_email=? AND u_token=? AND u_otp_status='unverified' `;
+    var data =await query(Query,[email,otp]);
+    return  data;
+};
+module.exports.updateemail = async (email, verify_email) => {
+    var Query = `UPDATE user SET verify_email = ? WHERE u_email = ?`;
+    var data = await query(Query, [verify_email, email]);
+    return data;
+};
 
+module.exports.deleteUserQuery = async (email) => {
+    var Query = `DELETE FROM user WHERE u_email = ?`;
+    var data = await query(Query, [email]);
+    return data;
+};

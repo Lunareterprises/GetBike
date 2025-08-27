@@ -6,7 +6,7 @@ var { login } = require('./controller/login')
 route.post('/login', login)
 
 
-var { Register } = require('./controller/registartion')
+var { Register, verifyOtp } = require('./controller/registartion')
 route.post('/register', Register)
 
 
@@ -90,6 +90,11 @@ route.post('/delete/center',deletecenter)
 
 var {editcenter}=require('./controller/bikeceneter')
 route.post('/edit/center',editcenter)
+
+
+var{verifyOtp}=require('./controller/registartion')
+    route.post('/register/verifyOtp',verifyOtp)
+
 
 
 
