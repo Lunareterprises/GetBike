@@ -1,13 +1,13 @@
 var express = require("express");
 var route = express.Router();
- 
 
-var{login}=require('./controller/login')
+
+var { login } = require('./controller/login')
 route.post('/login', login)
 
 
-var{Register}=require('./controller/registartion')
-route.post('/register',Register)
+var { Register } = require('./controller/registartion')
+route.post('/register', Register)
 
 
 var { forgotpassword } = require('./controller/forgetpassword')
@@ -18,64 +18,80 @@ route.post('/changepassword', ResetPassword)
 
 var { verifyOtp } = require('./controller/forgetpassword')
 route.post('/verifyOtp', verifyOtp)
-  
 
-var{addbike}=require('./controller/addbike')
+
+var { addbike } = require('./controller/addbike')
 route.post('/add/bike', addbike)
 
-var{listbike}=require('./controller/addbike')
-route.post('/list/bike',listbike)
+var { listbike } = require('./controller/addbike')
+route.post('/list/bike', listbike)
 
-var{deleteBikes}=require('./controller/addbike')
-route.post('/delete/bike',deleteBikes)
+var { deleteBikes } = require('./controller/addbike')
+route.post('/delete/bike', deleteBikes)
 
-var{editbikes}=require('./controller/addbike')
-route.post('/edit/bike',editbikes)
-
-
-var{bookings}=require('./controller/booking')
-route.post('/add/booking',bookings)
-
-var{cancelBooking}=require('./controller/cancelbooking')
-route.post('/cancel/booking',cancelBooking)
-
-var{EditPersonalInfo }=require('./controller/editprofile')
-route.post('/edit/profile',EditPersonalInfo )
+var { editbikes } = require('./controller/addbike')
+route.post('/edit/bike', editbikes)
 
 
-var{ContactUs }=require('./controller/contact')
-route.post('/add/contact',ContactUs )
+var { bookings } = require('./controller/booking')
+route.post('/add/booking', bookings)
 
-var{listcontact}=require('./controller/contact')
-route.post('/list/contact',listcontact)
+var { cancelBooking } = require('./controller/cancelbooking')
+route.post('/cancel/booking', cancelBooking)
 
-var{deletecontact}=require('./controller/contact')
-route.post('/delete/contact',deletecontact)
-
-var{documents}=require('./controller/documents')
-route.post('/add/document',documents)
+var { EditPersonalInfo } = require('./controller/editprofile')
+route.post('/edit/profile', EditPersonalInfo)
 
 
-var{updateBookingStatus}=require('./controller/updatebooking')
-route.post('/update/status',updateBookingStatus)
+var { ContactUs } = require('./controller/contact')
+route.post('/add/contact', ContactUs)
 
-var{listbooking}=require('./controller/booking')
-route.post('/list/booking',listbooking)
+var { listcontact } = require('./controller/contact')
+route.post('/list/contact', listcontact)
 
-var{listNotification}=require('./controller/listnotification')
-route.post('/list/notification',listNotification)
+var { deletecontact } = require('./controller/contact')
+route.post('/delete/contact', deletecontact)
 
-var{reviewadd}=require('./controller/review')
-route.post('/add/review',reviewadd)
+var { documents } = require('./controller/documents')
+route.post('/add/document', documents)
 
-var{listUser}=require('./controller/listUser')
-route.post('/list/user',listUser)
+
+var { updateBookingStatus } = require('./controller/updatebooking')
+route.post('/update/status', updateBookingStatus)
+
+var { listbooking } = require('./controller/booking')
+route.post('/list/booking', listbooking)
+
+var { listNotification } = require('./controller/listnotification')
+route.post('/list/notification', listNotification)
+
+var { reviewadd } = require('./controller/review')
+route.post('/add/review', reviewadd)
+
+var { listUser } = require('./controller/listUser')
+route.post('/list/user', listUser)
 
 var { deleteUser } = require('./controller/listUser');
 route.post('/deleteUser', deleteUser);
 
-var{extendbooking } =require('./controller/booking');
+var { extendbooking } = require('./controller/booking');
 route.post('/extend/booking', extendbooking);
+
+
+var { addbikecenter } = require('./controller/bikeceneter')
+route.post('/add/ceneter', addbikecenter)
+
+
+var { listcenter } = require('./controller/bikeceneter');
+route.post('/list/center', listcenter)
+var{deletecenter}=require('./controller/bikeceneter')
+route.post('/delete/center',deletecenter)
+
+
+var {editcenter}=require('./controller/bikeceneter')
+route.post('/edit/center',editcenter)
+
+
 
 
 module.exports = route

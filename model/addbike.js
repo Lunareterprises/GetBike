@@ -13,9 +13,9 @@ module.exports.SelectImage=async()=>{
     return data;
 
 }
-module.exports.AddBikeQuery=async(name, ratings, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath,center)=>{
-    var Query=`insert into bikes(b_name,b_ratings,b_description,b_price,b_location,b_extras,b_milage,b_geartype,b_fueltype,b_bhp,distance,max_speed,b_image,center) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
-    var data= await query(Query,[name, ratings, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,imagePath,center]);
+module.exports.AddBikeQuery=async(name, ratings, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,maintaince_status)=>{
+    var Query=`insert into bikes(b_name,b_ratings,b_description,b_price,b_location,b_extras,b_milage,b_geartype,b_fueltype,b_bhp,distance,max_speed,maintaince_status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    var data= await query(Query,[name, ratings, description, rate,location,extras,milage,geartype,fueltype,bhp ,distance, max_speed,maintaince_status]);
     return data;
 
 }
@@ -24,6 +24,12 @@ module.exports.AddBikeimageQuery=async(bike_id, imagePath)=>{
     var data=await query(Query, [bike_id, imagePath]);
     return data;
 }
+module.exports.AddBikeCenterQuery = async (bike_id, center) => {
+    var  Query = `INSERT INTO bike_centers (bike_id, center_name) VALUES (?, ?)`;
+    var data = await query(Query, [bike_id, center]);
+    return data;
+};
+
 
 
 
