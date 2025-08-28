@@ -6,20 +6,20 @@ var model = require('../model/bikecenter')
 module.exports.addbikecenter = async (req, res) => {
     try {
 
-        let { Center, district } = req.body;
+        let { location, district } = req.body;
 
 
-        if (!Center || !district) {
+        if (!location || !district) {
             return res.send({
                 result: false,
                 message: "insufficent parameter"
             });
         }
-        let addbike = await model.AddBikeCenterQuery(Center, district);
+        let addbike = await model.AddBikeCenterQuery(location, district);
         if (addbike.affectedRows > 0) {
             return res.send({
                 result: true,
-                message: "Bike center added successfully"
+                message: "Bike  location added successfully"
             });
         } else {
             return res.send({
@@ -42,11 +42,11 @@ module.exports.addbikecenter = async (req, res) => {
 }
 module.exports.listcenter = async (req, res) => {
     try {
-        let { bc_id } = req.body;
+        let { l_id } = req.body || {}
 
         var condition = ""
-        if (bc_id) {
-            condition = `where bc_id='${bc_id}'`
+        if (l_id) {
+            condition = `where l_id='${l_id}'`
         }
 
 
@@ -80,17 +80,17 @@ module.exports.listcenter = async (req, res) => {
 }
 module.exports.deletecenter = async (req, res) => {
     try {
-        let bc_id = req.body.bc_id;
+        let l_id = req.body.l_id;
 
-        if (bc_id) {
-            let checkcenter = await model.checkcenterQuery(bc_id);
+        if (l_id) {
+            let checkcenter = await model.checkcenterQuery(l_id);
             if (checkcenter.length == 0) {
                 return res.send({
                     result: false,
                     message: "Center details not found"
                 })
             } else {
-                var deletesection = await model.removecenterQuery(bc_id);
+                var deletesection = await model.removecenterQuery(l_id);
                 if (deletesection.affectedRows > 0)
                     return res.send({
                         result: true,
@@ -114,10 +114,10 @@ module.exports.deletecenter = async (req, res) => {
 }
 module.exports.editcenter = async (req, res) => {
     try {
-        let { bc_id, Center, district } = req.body;
+        let { l_id, location, district } = req.body;
 
         // Check required parameters
-        if (!bc_id || !Center || !district) {
+        if (!l_id || !location || !district) {
             return res.send({
                 result: false,
                 message: "Insufficient parameters"
@@ -125,7 +125,7 @@ module.exports.editcenter = async (req, res) => {
         }
 
         // Check if center exists
-        let checkcenter = await model.checkcenterQuery(bc_id);
+        let checkcenter = await model.checkcenterQuery(l_id);
         if (checkcenter.length === 0) {
             return res.send({
                 result: false,
@@ -134,7 +134,7 @@ module.exports.editcenter = async (req, res) => {
         }
 
         // Update center
-        let updatecenter = await model.updatecenterQuery(bc_id, Center, district);
+        let updatecenter = await model.updatecenterQuery(l_id,location, district);
         if (updatecenter.affectedRows > 0) {
             return res.send({
                 result: true,
