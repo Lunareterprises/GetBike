@@ -3,31 +3,31 @@ var util = require("util");
 const query = util.promisify(db.query).bind(db);
 
 
-module.exports.AddBikeCenterQuery = async (center, district) => {
+module.exports.AddBikeCenterQuery = async (location, district) => {
     
-        var Query = `INSERT INTO bike_centers (center_name, b_district) VALUES (?, ?)`;
-        var data = await query(Query, [center, district]);
+        var Query = `INSERT INTO location_center (l_location, l_district) VALUES (?, ?)`;
+        var data = await query(Query, [location, district]);
         return data;
 }
 module.exports.listcenterQuery=async(condition)=>{
-    var Query=`select * from bike_centers ${condition}`;
+    var Query=`select * from location_center ${condition}`;
     var data=await query(Query,[condition]);
     return data;
 }
-module.exports.checkcenterQuery=async(bc_id)=>{
-    var Query= `select * from bike_centers where bc_id=?`;
-    var data= await query(Query,[bc_id]);
+module.exports.checkcenterQuery=async(l_id)=>{
+    var Query= `select * from  location_center where l_id=?`;
+    var data= await query(Query,[l_id]);
     return data;
 }
-module.exports.removecenterQuery=async(bc_id)=>{
-    var Query=`delete from bike_centers where bc_id=?`;
-    var data= await query(Query,[bc_id])
+module.exports.removecenterQuery=async(l_id)=>{
+    var Query=`delete from location_center where l_id=?`;
+    var data= await query(Query,[l_id])
     return data;
 }
-module.exports.updatecenterQuery = async (bc_id, center, district) => {
-    var Query = `UPDATE bike_centers 
-                 SET center_name = ?, b_district = ? 
-                 WHERE bc_id = ?`;
-    var data = await query(Query, [center, district, bc_id]);
+module.exports.updatecenterQuery = async (l_id, location, district) => {
+    var Query = `UPDATE location_center
+                 SET l_location	 = ?, l_district = ? 
+                 WHERE l_id = ?`;
+    var data = await query(Query, [location, district, l_id]);
     return data;
 };

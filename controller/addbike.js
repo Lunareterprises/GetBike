@@ -16,10 +16,10 @@ module.exports.addbike = async (req, res) => {
                     data: err,
                 })
             }
-            let { name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status,center } = fields;
+            let { name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status, centerList } = fields;
 
 
-            if (!name || !ratings || !description || !rate || !location || !extras || !milage || !geartype || !fueltype || !bhp || !distance || !max_speed || !maintaince_status||!center) {
+            if (!name || !ratings || !description || !rate || !location || !extras || !milage || !geartype || !fueltype || !bhp || !distance || !max_speed || !maintaince_status) {
                 return res.send({
                     result: false,
                     message: "insufficent parameter",
@@ -27,11 +27,14 @@ module.exports.addbike = async (req, res) => {
                 })
             }
             // 1️⃣ Insert bike details first
-            const bikeResult = await model.AddBikeQuery(name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status,center);
+            const bikeResult = await model.AddBikeQuery(name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, maintaince_status);
             const bike_id = bikeResult.insertId; // get new bike id
+            centerList = JSON.parse(centerList)
+            for (const centerId of centerList) {
+                console.log("centerId", centerId);
 
-
-
+                await model.AddBikeresultCenterQuery(bike_id, centerId);
+            }
 
             if (files && files.image) {
                 // Normalize to array: handles both single and multiple image uploads
@@ -49,11 +52,13 @@ module.exports.addbike = async (req, res) => {
                     const imagePath = "/uploads/bikes/" + file.originalFilename;
 
                     var insertResult = await model.AddBikeimageQuery(bike_id, imagePath);
+
                     // console.log(insertResult, "image insert result");
                     console.log("Insert result:", insertResult);
                 }
 
                 if (insertResult.affectedRows > 0) {
+
 
                     return res.status(200).json({
                         result: true,
@@ -103,8 +108,10 @@ module.exports.listbike = async (req, res) => {
                     let bike_id = bike.b_id
                     let bikeimages = await model.bikeImages(bike_id);
                     let bikereviews = await model.getbikeReview(bike_id);
+                    let bike_centers = await model.getbikeCenter(bike_id);
                     bike.bikeimages = bikeimages;
                     bike.bikereviews = bikereviews;
+                    bike.bike_centers = bike_centers;
                     return bike;
                 })
             )
@@ -173,7 +180,7 @@ module.exports.editbikes = async (req, res) => {
                     data: err,
                 });
             }
-            const { b_id, name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, delete_old_images,center } = fields;
+            const { b_id, name, ratings, description, rate, location, extras, milage, geartype, fueltype, bhp, distance, max_speed, delete_old_images, center } = fields;
 
             if (!b_id) {
                 return res.send({
@@ -203,7 +210,7 @@ module.exports.editbikes = async (req, res) => {
             if (bhp) updates.push(`b_bhp='${bhp}'`);
             if (distance) updates.push(`distance='${distance}'`);
             if (max_speed) updates.push(`max_speed='${max_speed}'`);
-            if(center)updates.push(`center='${center}'`);
+            if (center) updates.push(`center='${center}'`);
 
 
 
