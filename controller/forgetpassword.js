@@ -258,7 +258,7 @@ console.log(req.body);
             nodemailer.getTestMessageUrl(infos);
             return res.send({
                 result: true,
-                message: "Password changed successfully",
+                message: "Password changed successfully,please relogin",
             });
 
         } else {
