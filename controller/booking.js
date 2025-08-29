@@ -103,20 +103,18 @@ module.exports.bookings = async (req, res) => {
 
 module.exports.listbooking = async (req, res) => {
     try {
-        let { b_id, user_id } = req.body || {}
+        let {  user_id } = req.body || {}
         var condition = ''
-        if (b_id) {
-            condition = `where b_id ='${b_id}'`
-        }
+        
         if (user_id) {
-            condition = `where b_u_id ='${user_id}'`
+            condition = `where b.b_u_id ='${user_id}'`
         }
         let listbooking = await model.listbookingQuery(condition);
         if (listbooking.length > 0) {
             let getbooking = await Promise.all(
                 listbooking.map(async (el) => {
                     let bike_id = el.b_bk_id
-                    let bikeImagePath = await model.getOneBikeImage(bike_id);
+                    let bikeImagePath = await model.getOneBikeImage(el.b_bk_id);
                     el.bikeImagePath = bikeImagePath
                     return el
                 }

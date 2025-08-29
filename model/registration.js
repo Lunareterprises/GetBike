@@ -3,7 +3,7 @@ var util =require("util");
 const query = util.promisify(db.query).bind(db);
 
 module.exports.CheckMail = async (email) => {
-    var Query = `select * from user where u_email =? and verify_email ='true'`;
+    var Query = `select * from user where u_email =?`;
     var data = query(Query, [email]);
     return data;
 }

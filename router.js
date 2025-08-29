@@ -6,7 +6,7 @@ var { login } = require('./controller/login')
 route.post('/login', login)
 
 
-var { Register, verifyOtp } = require('./controller/registartion')
+var { Register } = require('./controller/registartion')
 route.post('/register', Register)
 
 

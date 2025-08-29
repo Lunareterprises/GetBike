@@ -6,29 +6,28 @@ const nodemailer = require("nodemailer");
 
 module.exports.Register = async (req, res) => {
     try {
-        var { name, email, password, mobile,role } = req.body
-        if (!name || !email || !password || !mobile||!role) {
+        var { name, email, password, mobile, role } = req.body
+        if (!name || !email || !password || !mobile || !role) {
             return res.send({
                 result: false,
-                message: "insufficent parmeter"
+                message: "insufficient parameter"
             })
         }
         var date = moment().format('YYYY-MM-DD')
-          const checkmail = await model.CheckMail(email);
+        const checkmail = await model.CheckMail(email);
 
         const checkmobile = await model.checkmobile(mobile);
-        
-if (checkmail[0].verify_email == false) {
-    let deleteuser =await model.deleteUserQuery(email)
-}
-        if (checkmail.length > 0) {
 
+        if (checkmail[0]?.verify_email == false) {
+            let deleteuser = await model.deleteUserQuery(email)
+        }
+        if (checkmail[0]?.verify_email == true) {
             return res.send({
                 result: false,
                 message: "email already registerd"
             });
-
         }
+
         if (checkmobile.length > 0) {
             return res.send({
                 result: false,
@@ -38,47 +37,33 @@ if (checkmail[0].verify_email == false) {
 
         }
 
-        
-     
-
-           
-
-
         var hashedpasssword = await bcrypt.hash(password, 10);
         var otp = Math.floor(100000 + Math.random() * 900000);
-         var otpExpiry = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+        var otpExpiry = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
 
+        let adduser = await model.AddUser(name, email, hashedpasssword, mobile, date, otp, otpExpiry, role);
 
 
-
-
-
-        let adduser = await model.AddUser(name, email, hashedpasssword, mobile, date,otp,otpExpiry,role);
-        
-        
         const userId = adduser.insertId;
 
-        
-    
-            
-          // Send OTP email
-      
-                  let transporter = nodemailer.createTransport({
-                      host: "smtp.hostinger.com",
-                      port: 587,
-                      auth: {
-                          type: 'Custom',
-                          method: 'PLAIN',
-                          user: 'support@choiceglobal.in',
-                          pass: 'support123abcAB@',
-                      },
-                  });
-                  let infos = await transporter.sendMail({
-                      from: "getbike<support@choiceglobal.in>",
-                      to: email,
-                      subject: "change passoword",
-                      html: `<!DOCTYPE html>
+        // Send OTP email
+
+        let transporter = nodemailer.createTransport({
+            host: "smtp.hostinger.com",
+            port: 587,
+            auth: {
+                type: 'Custom',
+                method: 'PLAIN',
+                user: 'support@choiceglobal.in',
+                pass: 'support123abcAB@',
+            },
+        });
+        let infos = await transporter.sendMail({
+            from: "getbike<support@choiceglobal.in>",
+            to: email,
+            subject: "change passoword",
+            html: `<!DOCTYPE html>
                   <html lang="en">
                   <head>
                       <meta charset="UTF-8">
@@ -131,20 +116,16 @@ if (checkmail[0].verify_email == false) {
                   </html>
                   
                   `
-                  });
-                  
+        });
+
+        return res.send({
+            result: true,
+            message: "registerd successfully",
 
 
+        })
 
-
-            return res.send({
-                result: true,
-                message: "registerd successfully",
-              
-                
-            })
-       
-        }catch (error) {
+    } catch (error) {
         console.log(error);
 
         return res.send({
@@ -153,50 +134,50 @@ if (checkmail[0].verify_email == false) {
         })
     }
 
-    } 
-   
-   module.exports.verifyOtp = async (req, res) => {
-       try {
-           const { email, otp } = req.body;
-   
-           if (!email || !otp) {
-               return res.status(400).send({
-                   result: false,
-                   message: "Email and OTP are required"
-               });
-           }
-   
-           const tokenInfo = await model.ValidateResetToken(email, otp);
-   
-           if (!tokenInfo || tokenInfo.length === 0) {
-               return res.status(400).send({
-                   result: false,
-                   message: "Invalid OTP"
-               });
-           }
-   
-           const tokenExpiry = moment(tokenInfo[0].u_token_expiry);
-   
-           if (moment().isAfter(tokenExpiry)) {
-               return res.status(400).send({
-                   result:false,
-                   message: "OTP has expired"
-               });
-           }
-   
-           await model.updateOtpStatus(email, "verified");
-           await model.updateemail(email,"true")
-   
-           return res.send({
-               result: true,
-               message: "OTP verified successfully"
-           });
-   
-       } catch (error) {
-           console.error("Error verifying OTP:", error);
-           return res.status(500).send({
-               result: false,
-               message: "Internal server error"
-           });
-       }
-   };
+}
+
+module.exports.verifyOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        if (!email || !otp) {
+            return res.status(400).send({
+                result: false,
+                message: "Email and OTP are required"
+            });
+        }
+
+        const tokenInfo = await model.ValidateResetToken(email, otp);
+
+        if (!tokenInfo || tokenInfo.length === 0) {
+            return res.status(400).send({
+                result: false,
+                message: "Invalid OTP"
+            });
+        }
+
+        const tokenExpiry = moment(tokenInfo[0].u_token_expiry);
+
+        if (moment().isAfter(tokenExpiry)) {
+            return res.status(400).send({
+                result: false,
+                message: "OTP has expired"
+            });
+        }
+
+        await model.updateOtpStatus(email, "verified");
+        await model.updateemail(email, "true")
+
+        return res.send({
+            result: true,
+            message: "OTP verified successfully"
+        });
+
+    } catch (error) {
+        console.error("Error verifying OTP:", error);
+        return res.status(500).send({
+            result: false,
+            message: "Internal server error"
+        });
+    }
+};
