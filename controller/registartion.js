@@ -38,7 +38,7 @@ module.exports.Register = async (req, res) => {
         }
 
         var hashedpasssword = await bcrypt.hash(password, 10);
-        var otp = Math.floor(100000 + Math.random() * 900000);
+        var otp = Math.floor(1000 + Math.random() * 9000);
         var otpExpiry = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
 
