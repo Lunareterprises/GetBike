@@ -1,9 +1,9 @@
 var model = require('../model/updatebooking');
-const notify = require('../util/notification');
+const {addNotification} = require('../util/notification');
 
 module.exports.updateBookingStatus = async (req, res) => {
     try {
-        const { b_id,b_status, b_u_id } = req.body;
+        const { b_id,b_status, b_u_id, } = req.body;
 
         if (!b_id || !b_status || !b_u_id) {
             return res.send({
@@ -19,14 +19,22 @@ module.exports.updateBookingStatus = async (req, res) => {
             });
         }
         console.log("STATUS RECEIVED:", req.body.b_status);
+          const booking = await model.findBooking(b_id, b_u_id);
+        if (booking.length === 0) {
+            return res.send({ result: false, message: "Booking not found" });
+        }
+         let getadmin = await model.GetAdmin()
+
+        
 
 
         const result = await model.updateBookingStatus(b_id,b_u_id, b_status);
 
         if (result.affectedRows > 0) {
             // Send notification to user
-            await notify.addNotification(
-                b_id,
+            await addNotification(getadmin[0]?.u_id,
+                
+                b_u_id,
                 "user",
                 "Booking " + b_status,
                 `Your booking has been ${b_status}.`,
