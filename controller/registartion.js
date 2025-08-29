@@ -24,14 +24,14 @@ module.exports.Register = async (req, res) => {
         if (checkmail[0]?.verify_email == true) {
             return res.send({
                 result: false,
-                message: "email already registerd"
+                message: "email already registered"
             });
         }
 
         if (checkmobile.length > 0) {
             return res.send({
                 result: false,
-                message: "phone number already registerd"
+                message: "phone number already registered"
             });
 
 
@@ -105,8 +105,8 @@ module.exports.Register = async (req, res) => {
                   </head>
                   <body>
                       <div class="container">
-                          <h1>Change Your Password</h1>
-                          <p>We received a request to change your password. If you did not request this, please ignore this email.</p>
+                          <h1>OTP for registration</h1>
+                          <p>We received a request for user registration. If you did not request this, please ignore this email.</p>
                           <h1>${otp}</h1>
                           <p>This is your OTP to change the password</p>
                           <p>This OTP will expire in 5 minutes</p>
