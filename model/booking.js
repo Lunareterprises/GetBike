@@ -15,7 +15,8 @@ module.exports.checkbooking =async( user_id,bike_name, bike_id, pickup_location,
 //   return data;
 // }
 module.exports.listbookingQuery=async(condition)=>{
-  var Query=`SELECT * FROM  bookings ${condition}`;
+  var Query=`SELECT b.*, u.u_id, u.u_name, u.u_email, u.u_mobile, u.u_role FROM bookings b LEFT JOIN user u ON b.b_u_id = u.u_id ${condition} ORDER BY b.booking_date DESC;
+`;
   var data= await query(Query);
   return data;
 }
